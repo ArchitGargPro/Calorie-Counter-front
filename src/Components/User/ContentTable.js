@@ -1,12 +1,11 @@
-import {Button, Form, Input, InputNumber, Popconfirm, Table} from "antd";
 import React from "react";
 import EditableFormTable from "./EditableTable";
 
 
-function CalorieContentTable() {
+function CalorieContentTable(props) {
     return(
         <div>
-            <EditableFormTable/>
+            <EditableFormTable access={props.access}/>
         </div>
     );
 

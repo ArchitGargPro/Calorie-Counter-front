@@ -1,7 +1,8 @@
 import React, { useEffect, useState} from "react";
 import {Form, Input, InputNumber, Popconfirm, Tag, Table} from "antd";
-import {EAccess, Accesses, ETables} from "../../EAccess";
+import {EAccess, Accesses, ETables, ELogInStatus} from "../../EAccess";
 import AuthUtil from "../../utils/AuthUtil";
+import Axios from "axios";
 
 const EditableContext = React.createContext();
 
@@ -51,14 +52,14 @@ function EditableTable(props) {
     const tempData = {
         meal: [
             {
-                key: '1',
+                id: '1',
                 date: '12-12-12',
                 time: '12:12',
                 calorie: 1200,
                 title: 'breakfast',
             },
             {
-                key: '2',
+                id: '2',
                 date: '12-12-12',
                 time: '12:12',
                 calorie: 1200,
@@ -67,7 +68,7 @@ function EditableTable(props) {
         ],
         user: [
             {
-                key:'1',
+                id:'1',
                 name: 'Archit',
                 userName : 'arch',
                 password : '12345',
@@ -75,7 +76,7 @@ function EditableTable(props) {
                 calorie: '2400'
             },
             {
-                key:'2',
+                id:'2',
                 name: 'Archit',
                 userName : 'arch',
                 password : '12345',
@@ -83,7 +84,7 @@ function EditableTable(props) {
                 calorie: '2400'
             },
             {
-                key:'3',
+                id:'3',
                 name: 'Archit',
                 userName : 'arch',
                 password : '12345',
@@ -125,18 +126,18 @@ function EditableTable(props) {
                             <span>
                                 <EditableContext.Consumer>
                                     {form => (
-                                        <a onClick={() => save(form, record.key)} style={{marginRight: 8}} >
+                                        <a onClick={() => save(form, record)} style={{marginRight: 8}} >
                                             Save
                                         </a>
                                     )}
                                 </EditableContext.Consumer>
-                                <a href=" " onClick={() => cancel(record.key)}>Cancel</a>
+                                <a href=" " onClick={() => cancel(record.id)}>Cancel</a>
                             </span>
                         )
                     } else {
                         console.log(record, ':',isEditing(record), editingKey);
                         return (
-                            <a onClick={() => edit(record.key)}>
+                            <a onClick={() => edit(record.id)}>
                                 Edit
                             </a>
                         );
@@ -149,7 +150,7 @@ function EditableTable(props) {
 
                 render: (text, record) => {
                     return (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.id)}>
                             <a href=" ">Delete</a>
                         </Popconfirm>
                     );
@@ -177,27 +178,27 @@ function EditableTable(props) {
                 editable: true,
                 inputType: 'number',
                 render: (access) => {
-            let color;
-            let accesses;
-            switch (access) {
-                case EAccess.USER : color = 'blue';
-                    accesses = Accesses.USER;
-                    break;
-                case EAccess.MANAGER: color = 'green';
-                    accesses = Accesses.MANAGER;
-                    break;
-                case EAccess.ADMIN: color = 'volcano';
-                    accesses = Accesses.ADMIN;
-                    break;
-                default : color='black';
-                    accesses = Accesses.ANONYMOUS;
-            }
-            return (
-                <Tag color={color} key={access}>
-                    {accesses}
-                </Tag>
-            );
-        }
+                    let color;
+                    let accesses;
+                    switch (access) {
+                        case EAccess.USER : color = 'blue';
+                            accesses = Accesses.USER;
+                            break;
+                        case EAccess.MANAGER: color = 'green';
+                            accesses = Accesses.MANAGER;
+                            break;
+                        case EAccess.ADMIN: color = 'volcano';
+                            accesses = Accesses.ADMIN;
+                            break;
+                        default : color='black';
+                            accesses = Accesses.ANONYMOUS;
+                    }
+                    return (
+                        <Tag color={color} key={access}>
+                            {accesses}
+                        </Tag>
+                    );
+                }
             },
             {
                 title: 'Expected Calories(Per Day)',
@@ -215,18 +216,18 @@ function EditableTable(props) {
                             <span>
                                 <EditableContext.Consumer>
                                     {form => (
-                                        <a onClick={() => save(form, record.key)} style={{marginRight: 8}} >
+                                        <a onClick={() => save(form, record)} style={{marginRight: 8}} >
                                             Save
                                         </a>
                                     )}
                                 </EditableContext.Consumer>
-                                <a onClick={() => cancel(record.key)}>Cancel</a>
+                                <a onClick={() => cancel(record.id)}>Cancel</a>
                             </span>
                         )
                     } else {
                         console.log(record, ':',isEditing(record), editingKey);
                         return (
-                            <a onClick={() => edit(record.key)}>
+                            <a onClick={() => edit(record.id)}>
                                 Edit
                             </a>
                         );
@@ -239,7 +240,7 @@ function EditableTable(props) {
 
                 render: (text, record) => {
                     return (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.id)}>
                             <a>Delete</a>
                         </Popconfirm>
                     );
@@ -253,14 +254,86 @@ function EditableTable(props) {
     const [currentTable, setCurrentTable] = useState(ETables.MEAL);
     const [editingKey, setEditingKey] = useState();
 
-    const isEditing = record => record.key === editingKey;
+    useEffect(() => {
+        if(props.access === EAccess.USER) {
+            setCurrentTable(ETables.MEAL)
+        } else if(props.access ===EAccess.MANAGER || props.access === EAccess.ADMIN) {
+            setCurrentTable(ETables.USER)
+        }
+    }, []);
+
+
+    const editUserData = async (values, userName) =>{
+        const url = 'http://localhost:3000/user/update';
+        const header = AuthUtil.getHeaders();
+        values.userName = userName;
+        const response = await Axios.put(url,values, {"headers":header});
+        if(response.data.success) {
+            getUserData().then(() => {
+                setEditingKey(null);
+            });
+        } else {
+            alert(response.message);
+        }
+    };
+
+    const editMealData = async (values, userName) =>{
+        const url = 'http://localhost:3000/meal/update';
+        const header = AuthUtil.getHeaders();
+        values.userName = userName;
+        const response = await Axios.put(url, values, {"headers":header});
+        if(response.data.success) {
+            getUserData().then(() => {
+                setEditingKey(null);
+            });
+        } else {
+            alert(response.message);
+        }
+    };
+
+    const getMealData = async () => {
+        const url = 'http://localhost:3000/meal/';
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.get(url, {"headers":header});
+        if(response.data.success) {
+            const d = response.data.data;
+            setData(d);
+        } else {
+            alert(response.message);
+        }
+    };
+
+    const getUserData = async () => {
+        const url = 'http://localhost:3000/user/';
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.get(url, {"headers":header});
+        if(response.data.success) {
+            const d = response.data.data;
+            setData(d);
+        } else {
+            alert(response.message);
+        }
+    };
+
+    useEffect( () => {
+        if (currentTable === ETables.MEAL) {
+            setTable(columnSet.meal);
+            getMealData();
+        } else {
+            setTable(columnSet.user);
+            // TODO fetch data from db and set in data
+            getUserData();
+            // setData(tempData.user)
+        }}, [currentTable]);
+
+    const isEditing = record => record.id === editingKey;
 
     const cancel = () => {
         setEditingKey(null);
     };
 
+    // To avoid changing of table on edit complete or re render
     useEffect(() => {
-        console.log('editingKey changed',editingKey);
         if (currentTable === ETables.MEAL) {
             setTable(columnSet.meal);
         } else {
@@ -268,38 +341,50 @@ function EditableTable(props) {
         }
     }, [editingKey]);
 
-    const edit = async (key) => {
-        setEditingKey(key);
+    const edit = async (id) => {
+        setEditingKey(id);
     };
 
-    const save = (form, key) => {
+    const save = (form, record) => {
         form.validateFields((error, row) => {
+            console.log('row', row, 'record', record);
+
             if (error) {
                 return;
             }
-            const newData = data;
-            const index = newData.findIndex(item => key === item.key);
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
+            // const newData = data;
+            // const index = newData.findIndex(item => id === item.id);
+            // if (index > -1) {
+            //     const item = newData[index];
+            //     newData.splice(index, 1, {
+            //         ...item,
+            //         ...row,
+            //     });
+            //     setData(newData);
+            //     setEditingKey(null);
+            // } else {
+            //     newData.push(row);
+            //     setData(newData);
+            //     setEditingKey(null);
+            // }
+            if (currentTable === ETables.USER) {
+                editUserData(row, record.userName).then(() => {
+                    console.log('>>>>>');
+                    getUserData().then(() => {
+                        setEditingKey(null);
+                    });
                 });
-                setData(newData);
-                setEditingKey(null);
             } else {
-                newData.push(row);
-                setData(newData);
-                setEditingKey(null);
+                setTable(columnSet.user);
+                editMealData(row, record).then(() => {
+                    console.log('meal values>>>');
+                })
             }
         });
     };
 
-    const del = (key) => {
+    const del = (id) => {
         // TODO delete data
-        console.log(AuthUtil.getUser());
-        console.log('lcoal', localStorage.user.name);
-        setTable(columnSet.user);
         setData(tempData.user);
         setCurrentTable(ETables.USER);
         setEditingKey(null);

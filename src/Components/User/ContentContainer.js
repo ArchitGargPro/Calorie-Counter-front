@@ -29,11 +29,10 @@ function ContentContainer (props) {
         return (
             <Layout>
                 <Header>
-                    <CalorieContentHeader/>
+                    <CalorieContentHeader access={userAccess}/>
                 </Header>
-
                 <Content>
-                    <CalorieContentTable/>
+                    <CalorieContentTable access={userAccess}/>
                 </Content>
             </Layout>
         );

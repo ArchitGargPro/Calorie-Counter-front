@@ -4,14 +4,10 @@ const { RangePicker } = DatePicker;
 
 const dateFormat = 'DD/MM/YYYY';
 
-
 // function handleMenuClick(e) {
 //     // message.info('Click on menu item.');
 //     console.log('click', e);
 // }
-
-
-
 
 function CalorieContentHeader(){
     const [filter, setFilter] = useState("Filter");

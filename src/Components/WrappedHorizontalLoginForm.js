@@ -20,7 +20,6 @@ function HorizontalLoginForm (props) {
         props.form.validateFields(async (err, values) => {
             const url = 'http://localhost:3000/user/login';
             if (!err) {
-                console.log('Received values of form: ', values);
                 const response = await Axios.post(url, values);
                 if (response.data.success === true){
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);
