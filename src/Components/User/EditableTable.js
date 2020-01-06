@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react";
 import {Form, Input, InputNumber, Popconfirm, Tag, Table} from "antd";
 import {EAccess, Accesses, ETables} from "../../EAccess";
+import AuthUtil from "../../utils/AuthUtil";
 
 const EditableContext = React.createContext();
 
@@ -296,6 +297,8 @@ function EditableTable(props) {
 
     const del = (key) => {
         // TODO delete data
+        console.log(AuthUtil.getUser());
+        console.log('lcoal', localStorage.user.name);
         setTable(columnSet.user);
         setData(tempData.user);
         setCurrentTable(ETables.USER);

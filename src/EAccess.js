@@ -12,6 +12,14 @@ const Accesses = {
                 ADMIN: 'ADMIN',
 };
 
+const ELogInStatus = {
+    UNATTEMPTED : 'UNATTEMPTED',
+    ATTEMPTED: 'ATTEMPTED',
+    LOGGEDIN : 'LOGGEDIN',
+};
+
+
+
 const ETables = {
     USER: 'USER',
     MEAL: 'MEAL',
@@ -20,5 +28,6 @@ const ETables = {
 export {
         EAccess,
         Accesses,
-        ETables
+        ETables,
+        ELogInStatus
 };
