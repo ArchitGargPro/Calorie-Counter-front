@@ -1,18 +1,15 @@
 import {Button, DatePicker, Dropdown, Icon, Menu, TimePicker} from "antd";
 import React, {useState} from "react";
+import WrappedNewItemForm from "../NewItemForm";
+import Modal from "antd/es/modal";
 const { RangePicker } = DatePicker;
-
 const dateFormat = 'DD/MM/YYYY';
 
-// function handleMenuClick(e) {
-//     // message.info('Click on menu item.');
-//     console.log('click', e);
-// }
-
-function CalorieContentHeader(){
+function CalorieContentHeader(props){
     const [filter, setFilter] = useState("Filter");
     const [timeFilter, setTimeFilter] = useState('none');
     const [dateFilter, setDateFilter] = useState( 'none');
+    const [visible, setVisible] = useState(false);
 
     const menu = (
         <Menu onClick={onHandleMenuClick}>
@@ -40,6 +37,25 @@ function CalorieContentHeader(){
             default: setFilter("Filter")
         }
     }
+
+    // const entities = {
+    //     user : {
+    //         name: undefined,
+    //         userName : undefined,
+    //         password : undefined,
+    //         access: undefined ,
+    //         calorie: undefined,
+    //     },
+    //     meal : {
+    //         calorie: null,
+    //         title: null,
+    //     }
+    // };
+
+    const showModal = () => {
+        setVisible(true);
+    };
+
     return(
         <div>
             <Dropdown overlay={menu} >
@@ -55,7 +71,10 @@ function CalorieContentHeader(){
             <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time"/>
             <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time"/>
             <span style={{float:'right'}}>
-                <Button  type="primary" shape="circle" icon="plus" size="large" />
+                <Button  type="primary" shape="circle" icon="plus" size="large" visible={!visible} onClick={showModal} />
+                <Modal visible={visible}>
+                    <WrappedNewItemForm setVisible={setVisible} currentTable={props.currentTable}/>
+                </Modal>
             </span>
         </div>
     );

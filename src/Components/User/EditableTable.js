@@ -49,50 +49,50 @@ function EditableCell(props) {
 }
 
 function EditableTable(props) {
-    const tempData = {
-        meal: [
-            {
-                id: '1',
-                date: '12-12-12',
-                time: '12:12',
-                calorie: 1200,
-                title: 'breakfast',
-            },
-            {
-                id: '2',
-                date: '12-12-12',
-                time: '12:12',
-                calorie: 1200,
-                title: 'breakfast',
-            },
-        ],
-        user: [
-            {
-                id:'1',
-                name: 'Archit',
-                userName : 'arch',
-                password : '12345',
-                access: 3,
-                calorie: '2400'
-            },
-            {
-                id:'2',
-                name: 'Archit',
-                userName : 'arch',
-                password : '12345',
-                access: 2,
-                calorie: '2400'
-            },
-            {
-                id:'3',
-                name: 'Archit',
-                userName : 'arch',
-                password : '12345',
-                access: 1,
-                calorie: '2400'
-            }
-        ]
-    };
+    // const tempData = {
+    //     meal: [
+    //         {
+    //             id: '1',
+    //             date: '12-12-12',
+    //             time: '12:12',
+    //             calorie: 1200,
+    //             title: 'breakfast',
+    //         },
+    //         {
+    //             id: '2',
+    //             date: '12-12-12',
+    //             time: '12:12',
+    //             calorie: 1200,
+    //             title: 'breakfast',
+    //         },
+    //     ],
+    //     user: [
+    //         {
+    //             id:'1',
+    //             name: 'Archit',
+    //             userName : 'arch',
+    //             password : '12345',
+    //             access: 3,
+    //             calorie: '2400'
+    //         },
+    //         {
+    //             id:'2',
+    //             name: 'Archit',
+    //             userName : 'arch',
+    //             password : '12345',
+    //             access: 2,
+    //             calorie: '2400'
+    //         },
+    //         {
+    //             id:'3',
+    //             name: 'Archit',
+    //             userName : 'arch',
+    //             password : '12345',
+    //             access: 1,
+    //             calorie: '2400'
+    //         }
+    //     ]
+    // };
 
     const columnSet ={
         meal: [
@@ -150,7 +150,7 @@ function EditableTable(props) {
 
                 render: (text, record) => {
                     return (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.id)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record)}>
                             <a href=" ">Delete</a>
                         </Popconfirm>
                     );
@@ -240,7 +240,7 @@ function EditableTable(props) {
 
                 render: (text, record) => {
                     return (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record.id)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => del(record)}>
                             <a>Delete</a>
                         </Popconfirm>
                     );
@@ -249,11 +249,12 @@ function EditableTable(props) {
         ],
     };
 
-    const [data, setData] = useState(tempData.meal);
+    const [data, setData] = useState(null);
     const [table, setTable] = useState(columnSet.meal);
     const [currentTable, setCurrentTable] = useState(ETables.MEAL);
     const [editingKey, setEditingKey] = useState();
 
+    // set the table on mount
     useEffect(() => {
         if(props.access === EAccess.USER) {
             setCurrentTable(ETables.MEAL)
@@ -262,6 +263,26 @@ function EditableTable(props) {
         }
     }, []);
 
+    // Re-render the data
+    useEffect( () => {
+        if (currentTable === ETables.MEAL) {
+            setTable(columnSet.meal);
+            getMealData();
+        } else {
+            setTable(columnSet.user);
+            getUserData();
+        }}, [currentTable, props.newRow]);
+
+    // To avoid changing of table on edit complete or re render
+    useEffect(() => {
+        if (currentTable === ETables.MEAL) {
+            setTable(columnSet.meal);
+        } else {
+            setTable(columnSet.user);
+        }
+    }, [editingKey]);
+
+    const isEditing = record => record.id === editingKey;
 
     const editUserData = async (values, userName) =>{
         const url = 'http://localhost:3000/user/update';
@@ -277,13 +298,14 @@ function EditableTable(props) {
         }
     };
 
-    const editMealData = async (values, userName) =>{
+    const editMealData = async (values, id) =>{
         const url = 'http://localhost:3000/meal/update';
         const header = AuthUtil.getHeaders();
-        values.userName = userName;
+        values.id = id;
         const response = await Axios.put(url, values, {"headers":header});
+        console.log(response);
         if(response.data.success) {
-            getUserData().then(() => {
+            getMealData().then(() => {
                 setEditingKey(null);
             });
         } else {
@@ -315,31 +337,9 @@ function EditableTable(props) {
         }
     };
 
-    useEffect( () => {
-        if (currentTable === ETables.MEAL) {
-            setTable(columnSet.meal);
-            getMealData();
-        } else {
-            setTable(columnSet.user);
-            // TODO fetch data from db and set in data
-            getUserData();
-            // setData(tempData.user)
-        }}, [currentTable]);
-
-    const isEditing = record => record.id === editingKey;
-
     const cancel = () => {
         setEditingKey(null);
     };
-
-    // To avoid changing of table on edit complete or re render
-    useEffect(() => {
-        if (currentTable === ETables.MEAL) {
-            setTable(columnSet.meal);
-        } else {
-            setTable(columnSet.user);
-        }
-    }, [editingKey]);
 
     const edit = async (id) => {
         setEditingKey(id);
@@ -369,24 +369,52 @@ function EditableTable(props) {
             // }
             if (currentTable === ETables.USER) {
                 editUserData(row, record.userName).then(() => {
-                    console.log('>>>>>');
-                    getUserData().then(() => {
-                        setEditingKey(null);
-                    });
                 });
             } else {
-                setTable(columnSet.user);
-                editMealData(row, record).then(() => {
-                    console.log('meal values>>>');
+                console.log('>>>>>>>>');
+                editMealData(row, record.id).then(() => {
                 })
             }
         });
     };
 
-    const del = (id) => {
-        // TODO delete data
-        setData(tempData.user);
-        setCurrentTable(ETables.USER);
+    const deleteUserData = async (userName) => {
+        const url = `http://localhost:3000/user/remove/${userName}`;
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.delete(url, {"headers":header});
+        console.log(userName, response);
+
+        if(response.data.success) {
+            getUserData().then(() => {
+                setEditingKey(null);
+            });
+        } else {
+            alert(response.message);
+        }
+    };
+
+    const deleteMealData = async (id) => {
+        const url = `http://localhost:3000/meal/delete/${id}`;
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.delete(url, {"headers":header});
+        console.log(response);
+
+        if(response.data.success) {
+            console.log(response);
+            getMealData().then(() => {
+                setEditingKey(null);
+            });
+        } else {
+            alert(response.message);
+        }
+    };
+
+    const del = (record) => {
+        if(currentTable === ETables.USER) {
+            deleteUserData(record.userName);
+        } else {
+            deleteMealData(record.id);
+        }
         setEditingKey(null);
     };
 

@@ -3,7 +3,6 @@ import CalorieContentTable from "./ContentTable";
 import {Layout} from "antd";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
-import {ELogInStatus} from "../../EAccess";
 const {Header, Content} = Layout;
 
 function ContentContainer (props) {
@@ -29,7 +28,7 @@ function ContentContainer (props) {
         return (
             <Layout>
                 <Header>
-                    <CalorieContentHeader access={userAccess}/>
+                    <CalorieContentHeader access={userAccess} currentTable={props.currentTable} newUserAlert={props.newUserAlert} />
                 </Header>
                 <Content>
                     <CalorieContentTable access={userAccess}/>
