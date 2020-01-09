@@ -35,6 +35,10 @@ export function rootReducer(state = initialState, action) {
                 ...state,
                 userAlert: action.payload
             };
+        case ActionTypes.RESET :
+            return {
+                ...initialState
+            };
         default :
             return state;
     }

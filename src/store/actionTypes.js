@@ -3,6 +3,7 @@ const ActionTypes = {
     SET_CURRENT_ACCESS : "SET_CURRENT_ACCESS",
     NEW_ROW_UPDATE : "NEW_ROW_UPDATE",
     SET_CURRENT_TABLE : "SET_CURRENT_TABLE",
+    RESET : "RESET",
 };
 
 export default ActionTypes;

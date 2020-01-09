@@ -1,4 +1,4 @@
-import {Button, PageHeader} from "antd";
+import {Button, PageHeader, Popconfirm} from "antd";
 import React from "react";
 import WrappedHorizontalLoginForm from "./WrappedHorizontalLoginForm";
 import AuthUtil from "../utils/AuthUtil";
@@ -12,12 +12,20 @@ function CalorieHeader(props){
         props.setLoginStatusAction(ELogInStatus.ATTEMPTED);
     };
 
+    const logOut = () => {
+        AuthUtil.clearJWTToken();
+        props.logOutAction();
+    };
+
     const loginControl = () => {
         switch(props.loginStatus) {
             case ELogInStatus.LOGGEDIN : return (
-                <a key="1" type="primary">
-                    Welcome, {AuthUtil.getUser().name}
-                </a>
+                <Popconfirm title="Sure to Log Out?" onConfirm={logOut}>
+                    <h3>Welcome, {AuthUtil.getUser().name}</h3>
+                    <a key="1" type="primary">
+                        LogOut
+                    </a>
+                </Popconfirm>
             );
             case ELogInStatus.ATTEMPTED : return (
                 <WrappedHorizontalLoginForm/>
@@ -52,6 +60,9 @@ const mapDispatchToProps = dispatch => ({
             loginStatus
         }
     }),
+    logOutAction: () => dispatch({
+        type: ActionTypes.RESET
+    })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalorieHeader);
