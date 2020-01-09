@@ -1,7 +1,9 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Button, Form, Icon, Input} from "antd";
 import Axios from "axios";
 import AuthUtil from "../utils/AuthUtil";
+import {connect} from "react-redux";
+import ActionTypes from "../store/actionTypes";
 import {ELogInStatus} from "../EAccess";
 
 
@@ -10,11 +12,6 @@ function hasErrors(fieldsError) {
 }
 
 function HorizontalLoginForm (props) {
-
-    useEffect(() => {
-        props.form.validateFields();
-    }, []);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields(async (err, values) => {
@@ -23,7 +20,7 @@ function HorizontalLoginForm (props) {
                 const response = await Axios.post(url, values);
                 if (response.data.success === true){
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);
-                    props.logInStatus(ELogInStatus.LOGGEDIN);
+                    props.setLoginStatusAction(ELogInStatus.LOGGEDIN);
                 }else{
                     alert(response.data.message);
                 }
@@ -69,4 +66,17 @@ function HorizontalLoginForm (props) {
 
 const WrappedHorizontalLoginForm = Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
 
-export default WrappedHorizontalLoginForm;
+const mapStateToProps = state => ({
+    loginStatus: state.loginStatus,
+});
+
+const mapDispatchToProps = dispatch => ({
+    setLoginStatusAction: loginStatus => dispatch({
+        type: ActionTypes.SET_LOGIN_STATUS,
+        payload: {
+            loginStatus
+        }
+    }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedHorizontalLoginForm);

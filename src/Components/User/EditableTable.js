@@ -3,6 +3,7 @@ import {Form, Input, InputNumber, Popconfirm, Tag, Table} from "antd";
 import {EAccess, Accesses, ETables, ELogInStatus} from "../../EAccess";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
+import {connect} from "react-redux";
 
 const EditableContext = React.createContext();
 
@@ -49,51 +50,6 @@ function EditableCell(props) {
 }
 
 function EditableTable(props) {
-    // const tempData = {
-    //     meal: [
-    //         {
-    //             id: '1',
-    //             date: '12-12-12',
-    //             time: '12:12',
-    //             calorie: 1200,
-    //             title: 'breakfast',
-    //         },
-    //         {
-    //             id: '2',
-    //             date: '12-12-12',
-    //             time: '12:12',
-    //             calorie: 1200,
-    //             title: 'breakfast',
-    //         },
-    //     ],
-    //     user: [
-    //         {
-    //             id:'1',
-    //             name: 'Archit',
-    //             userName : 'arch',
-    //             password : '12345',
-    //             access: 3,
-    //             calorie: '2400'
-    //         },
-    //         {
-    //             id:'2',
-    //             name: 'Archit',
-    //             userName : 'arch',
-    //             password : '12345',
-    //             access: 2,
-    //             calorie: '2400'
-    //         },
-    //         {
-    //             id:'3',
-    //             name: 'Archit',
-    //             userName : 'arch',
-    //             password : '12345',
-    //             access: 1,
-    //             calorie: '2400'
-    //         }
-    //     ]
-    // };
-
     const columnSet ={
         meal: [
             {
@@ -121,7 +77,6 @@ function EditableTable(props) {
                 dataIndex: '',
                 render: (text, record) => {
                     if (isEditing(record)) {
-                        console.log(record, ':',isEditing(record), editingKey);
                         return (
                             <span>
                                 <EditableContext.Consumer>
@@ -135,7 +90,6 @@ function EditableTable(props) {
                             </span>
                         )
                     } else {
-                        console.log(record, ':',isEditing(record), editingKey);
                         return (
                             <a onClick={() => edit(record.id)}>
                                 Edit
@@ -251,17 +205,13 @@ function EditableTable(props) {
 
     const [data, setData] = useState(null);
     const [table, setTable] = useState(columnSet.meal);
-    const [currentTable, setCurrentTable] = useState(ETables.MEAL);
+    const [currentTable, setCurrentTable] = useState(props.currentTable);
     const [editingKey, setEditingKey] = useState();
 
     // set the table on mount
     useEffect(() => {
-        if(props.access === EAccess.USER) {
-            setCurrentTable(ETables.MEAL)
-        } else if(props.access ===EAccess.MANAGER || props.access === EAccess.ADMIN) {
-            setCurrentTable(ETables.USER)
-        }
-    }, []);
+        setCurrentTable(props.currentTable)
+    }, [props.currentTable]);
 
     // Re-render the data
     useEffect( () => {
@@ -271,7 +221,12 @@ function EditableTable(props) {
         } else {
             setTable(columnSet.user);
             getUserData();
-        }}, [currentTable, props.newRow]);
+        }}, [currentTable, props.newRowAlert]);
+
+    // turn off the new row alert
+    useEffect(() => {
+        props.setNewRowAlert(false);
+    }, [props.newRowAlert]);
 
     // To avoid changing of table on edit complete or re render
     useEffect(() => {
@@ -294,7 +249,7 @@ function EditableTable(props) {
                 setEditingKey(null);
             });
         } else {
-            alert(response.message);
+            alert(response.data.message);
         }
     };
 
@@ -309,7 +264,7 @@ function EditableTable(props) {
                 setEditingKey(null);
             });
         } else {
-            alert(response.message);
+            alert(response.data.message);
         }
     };
 
@@ -321,7 +276,11 @@ function EditableTable(props) {
             const d = response.data.data;
             setData(d);
         } else {
-            alert(response.message);
+            if(response.data.message === "no meals found") {
+                setData(null);
+            } else {
+                alert(response.data.message);
+            }
         }
     };
 
@@ -333,7 +292,7 @@ function EditableTable(props) {
             const d = response.data.data;
             setData(d);
         } else {
-            alert(response.message);
+            alert(response.data.message);
         }
     };
 
@@ -348,30 +307,13 @@ function EditableTable(props) {
     const save = (form, record) => {
         form.validateFields((error, row) => {
             console.log('row', row, 'record', record);
-
             if (error) {
                 return;
             }
-            // const newData = data;
-            // const index = newData.findIndex(item => id === item.id);
-            // if (index > -1) {
-            //     const item = newData[index];
-            //     newData.splice(index, 1, {
-            //         ...item,
-            //         ...row,
-            //     });
-            //     setData(newData);
-            //     setEditingKey(null);
-            // } else {
-            //     newData.push(row);
-            //     setData(newData);
-            //     setEditingKey(null);
-            // }
             if (currentTable === ETables.USER) {
                 editUserData(row, record.userName).then(() => {
                 });
             } else {
-                console.log('>>>>>>>>');
                 editMealData(row, record.id).then(() => {
                 })
             }
@@ -389,7 +331,7 @@ function EditableTable(props) {
                 setEditingKey(null);
             });
         } else {
-            alert(response.message);
+            alert(response.data.message);
         }
     };
 
@@ -405,7 +347,7 @@ function EditableTable(props) {
                 setEditingKey(null);
             });
         } else {
-            alert(response.message);
+            alert(response.data.message);
         }
     };
 
@@ -432,7 +374,6 @@ function EditableTable(props) {
             ...col,
             onCell: record => ({
                 record,
-                // inputType: col.dataIndex === 'calorie'||'access' ? 'number' : 'text',
                 inputType: col.inputType,
                 dataIndex: col.dataIndex,
                 title: col.title,
@@ -457,4 +398,9 @@ function EditableTable(props) {
 
 const EditableFormTable = Form.create()(EditableTable);
 
-export default EditableFormTable;
+const mapStateToProps = state => ({
+    currentTable: state.currentTable
+});
+
+
+export default connect(mapStateToProps)(EditableFormTable);

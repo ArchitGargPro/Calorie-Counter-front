@@ -1,28 +1,43 @@
 import {Form, Input, Button} from 'antd';
-import React, {useState} from "react";
+import React from "react";
 import {ETables} from "../EAccess";
+import {connect} from "react-redux";
+import AuthUtil from "../utils/AuthUtil";
+import Axios from "axios";
 
 function NewItemForm(props) {
 
+    const addNewData = async (values) => {
+        let url;
+        if(props.currentTable === ETables.MEAL) {
+            url = "http://localhost:3000/meal/new";
+        } else {
+            url = "http://localhost:3000/user/new"
+        }
+        const headers = AuthUtil.getHeaders();
+        console.log(values);
+        const response = await Axios.post(url, values, {"headers":headers});
+        console.log(response);
+        if(response.data.success) {
+            props.setVisible(false);
+            props.setNewRowAlert(true);
+        } else {
+            alert(response.data.message);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.form.validateFieldsAndScroll((err, values) => {
+        props.form.validateFieldsAndScroll(async (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                await addNewData(values);
             }
         });
     };
     const { getFieldDecorator } = props.form;
 
-    const addNewRow = async (e) => {
-        e.preventDefault();
-        console.log('Received values of form: ', e.target.value);
-    };
-
-    console.log(props.currentTable);
-
     if(props.currentTable === ETables.USER) {
-        return (<Form layout='vertical' onSubmit={handleSubmit}>
+        return (<Form layout='inline' onSubmit={handleSubmit}>
             <Form.Item label="userName">
                 {getFieldDecorator('userName', {
                     rules:[{
@@ -47,21 +62,11 @@ function NewItemForm(props) {
                     }]
                 })(<Input type='text'/>)}
             </Form.Item>
-            <Form.Item label="access">
-                {getFieldDecorator('access', {
-                    // rules:[{
-                    //     required: false,
-                    //     message: 'This is a required field',
-                    // }]
-                })(<Input type='number'/>)}
+            <Form.Item label="Access">
+                {getFieldDecorator('access', {})(<Input type='number'/>)}
             </Form.Item>
             <Form.Item label="Expected Calories per Day">
-                {getFieldDecorator('description', {
-                    // rules:[{
-                    //     required: true,
-                    //     message: 'This is a required field',
-                    // }]
-                })(<Input type='number'/>)}
+                {getFieldDecorator('calorie', {})(<Input type='number'/>)}
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">
@@ -70,9 +75,9 @@ function NewItemForm(props) {
             </Form.Item>
         </Form>);
     } else {
-        return (<Form layout='vertical' onSubmit={handleSubmit}>
-            <Form.Item label="calories">
-                {getFieldDecorator('calories', {
+        return (<Form layout='inline' onSubmit={handleSubmit}>
+            <Form.Item label="Calories">
+                {getFieldDecorator('calorie', {
                     rules:[{
                         required: true,
                         message: 'This is a required field',
@@ -80,7 +85,7 @@ function NewItemForm(props) {
                 })(<Input type='number'/>)}
             </Form.Item>
             <Form.Item label="Description">
-                {getFieldDecorator('description', {
+                {getFieldDecorator('title', {
                     rules:[{
                         required: true,
                         message: 'This is a required field',
@@ -98,4 +103,8 @@ function NewItemForm(props) {
 
 const WrappedNewItemForm = Form.create({ name: 'register' })(NewItemForm);
 
-export default WrappedNewItemForm;
+const mapStateToProps = state => ({
+    currentTable : state.currentTable
+});
+
+export default connect(mapStateToProps)(WrappedNewItemForm);

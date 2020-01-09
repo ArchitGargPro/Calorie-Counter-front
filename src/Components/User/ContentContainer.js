@@ -1,41 +1,55 @@
 import CalorieContentHeader from "./ContentHeader";
 import CalorieContentTable from "./ContentTable";
 import {Layout} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
+import {connect} from "react-redux";
+import {EAccess, ELogInStatus, ETables} from "../../EAccess";
+import ActionTypes from "../../store/actionTypes";
 import AuthUtil from "../../utils/AuthUtil";
 const {Header, Content} = Layout;
 
 function ContentContainer (props) {
-    const [userAccess, setUserAccess] = useState(null);
+    const [dateFilter, setDateFilter] = useState(null);
+    const [timeFilter, setTimeFilter] = useState(null);
+    const [newRowAlert, setNewRowAlert] = useState(false);
 
-    useEffect(() => {
-        if(props.loginStatus) {
-            setUserAccess(AuthUtil.getUser().access);
-        } else {
-            setUserAccess(null);
-        }
-    }, [props.loginStatus]);
-
-    if(userAccess === null){
+    console.log(props);
+    if(props.loginStatus !== ELogInStatus.LOGGEDIN){
         return (
             <Layout>
-                <p>
-                    <h1 style={{padding:'20px'}}>   Please Login to continue</h1>
-                </p>
+                <h1 style={{padding:'20px'}}>   Please Login to continue</h1>
             </Layout>
         );
     } else {
+        if (AuthUtil.getUser().access === EAccess.USER) {
+            props.updateCurrentTableAction(ETables.MEAL);
+        } else {
+            props.updateCurrentTableAction(ETables.USER);
+        }
         return (
             <Layout>
                 <Header>
-                    <CalorieContentHeader access={userAccess} currentTable={props.currentTable} newUserAlert={props.newUserAlert} />
+                    <CalorieContentHeader setDateFilter={setDateFilter} setTimeFilter={setTimeFilter} setNewRowAlert={setNewRowAlert}/>
                 </Header>
                 <Content>
-                    <CalorieContentTable access={userAccess}/>
+                    <CalorieContentTable dateFilter={dateFilter} timeFilter={timeFilter} newRowAlert={newRowAlert} setNewRowAlert={setNewRowAlert}/>
                 </Content>
             </Layout>
         );
     }
 }
 
-export default ContentContainer;
+const mapStateToProps = state => ({
+    loginStatus : state.loginStatus
+});
+
+const mapDispatchToProps = dispatch => ({
+    updateCurrentTableAction: currentTable => dispatch({
+        type: ActionTypes.SET_CURRENT_TABLE,
+        payload: {
+            currentTable
+        }
+    })
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContentContainer);

@@ -1,15 +1,18 @@
 import {Button, DatePicker, Dropdown, Icon, Menu, TimePicker} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import WrappedNewItemForm from "../NewItemForm";
 import Modal from "antd/es/modal";
+import {connect} from "react-redux";
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';
 
-function CalorieContentHeader(props){
+function CalorieContentHeader(props) {
     const [filter, setFilter] = useState("Filter");
     const [timeFilter, setTimeFilter] = useState('none');
     const [dateFilter, setDateFilter] = useState( 'none');
     const [visible, setVisible] = useState(false);
+    const [time1, setTime1] = useState(null);
+    const [time2, setTime2] = useState(null);
 
     const menu = (
         <Menu onClick={onHandleMenuClick}>
@@ -38,22 +41,21 @@ function CalorieContentHeader(props){
         }
     }
 
-    // const entities = {
-    //     user : {
-    //         name: undefined,
-    //         userName : undefined,
-    //         password : undefined,
-    //         access: undefined ,
-    //         calorie: undefined,
-    //     },
-    //     meal : {
-    //         calorie: null,
-    //         title: null,
-    //     }
-    // };
+    const setDateFilterAlert = (e) => {
+      console.log(e);
+    };
+
+    const setTimeFilterAlert = () => {
+        console.log();
+    };
+    // TODO add METHODS
 
     const showModal = () => {
         setVisible(true);
+    };
+
+    const hideModal = () => {
+        setVisible(false);
     };
 
     return(
@@ -66,18 +68,22 @@ function CalorieContentHeader(props){
             <RangePicker
                 style={{display:dateFilter}}
                 format={dateFormat}
+                onChange={setDateFilterAlert}
             />
-
-            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time"/>
-            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time"/>
+            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time" onChange={setTime1}/>
+            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
             <span style={{float:'right'}}>
-                <Button  type="primary" shape="circle" icon="plus" size="large" visible={!visible} onClick={showModal} />
-                <Modal visible={visible}>
-                    <WrappedNewItemForm setVisible={setVisible} currentTable={props.currentTable}/>
+                <Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} onClick={showModal} />
+                <Modal visible={visible} footer={null} onCancel={hideModal}>
+                    <WrappedNewItemForm setVisible={setVisible} setNewRowAlert={props.setNewRowAlert}/>
                 </Modal>
             </span>
         </div>
     );
 }
 
-export default CalorieContentHeader;
+const mapStateToProps = state => ({
+    alert: state.userAlert
+});
+
+export default connect(mapStateToProps)(CalorieContentHeader);

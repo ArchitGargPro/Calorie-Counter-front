@@ -1,0 +1,8 @@
+const ActionTypes = {
+    SET_LOGIN_STATUS : "SET_LOGIN_STATUS",
+    SET_CURRENT_ACCESS : "SET_CURRENT_ACCESS",
+    NEW_ROW_UPDATE : "NEW_ROW_UPDATE",
+    SET_CURRENT_TABLE : "SET_CURRENT_TABLE",
+};
+
+export default ActionTypes;
