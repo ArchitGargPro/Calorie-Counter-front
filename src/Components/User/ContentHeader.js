@@ -3,6 +3,9 @@ import React, {useEffect, useState} from "react";
 import WrappedNewItemForm from "../NewItemForm";
 import Modal from "antd/es/modal";
 import {connect} from "react-redux";
+import moment from "moment";
+import {ETables} from "../../EAccess";
+import Search from "antd/es/input/Search";
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';
 
@@ -13,6 +16,12 @@ function CalorieContentHeader(props) {
     const [visible, setVisible] = useState(false);
     const [time1, setTime1] = useState(null);
     const [time2, setTime2] = useState(null);
+
+    useEffect(() => {
+        if(time1 !== null && time2 !== null && time1 !== time2 ) {
+            setTimeFilterAlert();
+        }
+    }, [time1, time2]);
 
     const menu = (
         <Menu onClick={onHandleMenuClick}>
@@ -41,14 +50,22 @@ function CalorieContentHeader(props) {
         }
     }
 
-    const setDateFilterAlert = (e) => {
-      console.log(e);
+    const setDateFilterAlert = (dates) => {
+        if (dates.length === 2) {
+            const date1 = moment(dates[0]).format('DD/MM/YYYY');
+            const date2 = moment(dates[1]).format('DD/MM/YYYY');
+            props.setDateFilter({
+                date1: date1,
+                date2: date2
+            });
+        } else {
+            props.setDateFilter(null);
+        }
     };
 
     const setTimeFilterAlert = () => {
         console.log();
     };
-    // TODO add METHODS
 
     const showModal = () => {
         setVisible(true);
@@ -58,32 +75,54 @@ function CalorieContentHeader(props) {
         setVisible(false);
     };
 
+    const searchHandle = (value) => {
+        console.log(value);
+    };
+
+    const setHeader = () => {
+        console.log(props.currentTable);
+        if (props.currentTable === ETables.MEAL) {
+            return (
+                <div>
+                    <Dropdown overlay={menu} >
+                        <Button style={{marginRight:'20px'}}>
+                            {filter}<Icon type="down" />
+                        </Button>
+                    </Dropdown>
+                    <RangePicker
+                        style={{display:dateFilter}}
+                        format={dateFormat}
+                        defaultPickerValue={null}
+                        onChange={setDateFilterAlert} />
+                    <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time" onChange={setTime1}/>
+                    <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
+                </div>
+            );
+        } else {
+            return (
+                <span  style={{float:'left', margin:'15px'}}>
+                    <Search placeholder="Search by userName" onSearch={searchHandle} enterButton />
+                </span>
+            );
+        }
+    };
+
     return(
-        <div>
-            <Dropdown overlay={menu} >
-                <Button style={{marginRight:'20px'}}>
-                    {filter} <Icon type="down" />
-                </Button>
-            </Dropdown>
-            <RangePicker
-                style={{display:dateFilter}}
-                format={dateFormat}
-                onChange={setDateFilterAlert}
-            />
-            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time" onChange={setTime1}/>
-            <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
+        <span>
+            {setHeader()}
             <span style={{float:'right'}}>
                 <Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} onClick={showModal} />
                 <Modal visible={visible} footer={null} onCancel={hideModal}>
                     <WrappedNewItemForm setVisible={setVisible} setNewRowAlert={props.setNewRowAlert}/>
                 </Modal>
             </span>
-        </div>
+        </span>
     );
 }
 
 const mapStateToProps = state => ({
-    alert: state.userAlert
+    alert: state.userAlert,
+    currentTable: state.currentTable
 });
 
 export default connect(mapStateToProps)(CalorieContentHeader);

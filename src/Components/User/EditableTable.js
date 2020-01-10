@@ -179,7 +179,6 @@ function EditableTable(props) {
                             </span>
                         )
                     } else {
-                        console.log(record, ':',isEditing(record), editingKey);
                         return (
                             <a onClick={() => edit(record.id)}>
                                 Edit
@@ -207,6 +206,22 @@ function EditableTable(props) {
     const [table, setTable] = useState(columnSet.meal);
     const [currentTable, setCurrentTable] = useState(props.currentTable);
     const [editingKey, setEditingKey] = useState();
+    const [firstRender, setFirstRender] = useState(true);
+
+    // Update data on update of dateFilter
+    useEffect(() => {
+        if(firstRender) {
+            setFirstRender(false);
+        } else {
+            if(props.dateFilter === null) {
+                getMealData().then(() => {
+                    setEditingKey(null);
+                });
+            } else {
+                getMealDateFilter(props.dateFilter.date1, props.dateFilter.date2);
+            }
+        }
+    }, [props.dateFilter]);
 
     // set the table on mount
     useEffect(() => {
@@ -284,6 +299,23 @@ function EditableTable(props) {
         }
     };
 
+    const getMealDateFilter = async (date1, date2, userName) => {
+        console.log(date1, date2);
+        const url = 'http://localhost:3000/meal/byDate/';
+        const header = AuthUtil.getHeaders();
+        if (AuthUtil.getUser().access === EAccess.USER) {
+            userName = AuthUtil.getUser().userName;
+        }
+        const response = await Axios.get(url,{"headers":header}, {"body": {"date1": date1, "date2": date2, "userName": userName}});
+        console.log(response);
+        if(response.data.success) {
+            const d = response.data.data;
+            setData(d);
+        } else {
+            alert(response.data.message);
+        }
+    };
+
     const getUserData = async () => {
         const url = 'http://localhost:3000/user/';
         const header = AuthUtil.getHeaders();
@@ -306,7 +338,6 @@ function EditableTable(props) {
 
     const save = (form, record) => {
         form.validateFields((error, row) => {
-            console.log('row', row, 'record', record);
             if (error) {
                 return;
             }

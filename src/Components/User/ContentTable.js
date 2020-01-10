@@ -4,7 +4,7 @@ import EditableFormTable from "./EditableTable";
 function CalorieContentTable(props) {
     return(
         <div>
-            <EditableFormTable newRowAlert={props.newRowAlert} setNewRowAlert={props.setNewRowAlert}/>
+            <EditableFormTable dateFilter={props.dateFilter} newRowAlert={props.newRowAlert} setNewRowAlert={props.setNewRowAlert}/>
         </div>
     );
 }

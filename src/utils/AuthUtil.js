@@ -1,5 +1,5 @@
 class AuthUtil {
-    static jwttoken = "";
+    static jwttoken;
     static user = null ;
 
     static getHeaders() {
