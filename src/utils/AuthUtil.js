@@ -14,8 +14,8 @@ class AuthUtil {
 
     static getUser() {
         // console.log(localStorage.getItem("user"));
-        // return this.user || localStorage.getItem("user");
-        return localStorage.getItem('user') ?  localStorage.getItem('user') : undefined;
+        return this.user || localStorage.getItem("user");
+
     }
 
      static clearJWTToken() {

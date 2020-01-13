@@ -1,20 +1,28 @@
 import {Button, PageHeader, Popconfirm} from "antd";
 import React from "react";
-import WrappedHorizontalLoginForm from "../Forms/WrappedHorizontalLoginForm";
+import WrappedHorizontalLoginForm from "../Forms/WrappedNormalLoginForm";
 import AuthUtil from "../../utils/AuthUtil";
 import {ELogInStatus} from "../../Constants/EAccess";
 import ActionTypes from "../../store/actionTypes";
 import {connect} from "react-redux";
-
+import {NavLink, Redirect} from "react-router-dom";
 
 function CalorieHeader(props){
-    const onLoginClickHandle = () =>{
-        props.setLoginStatusAction(ELogInStatus.ATTEMPTED);
-    };
+    // const onLoginClickHandle = () =>{
+    //     props.setLoginStatusAction(ELogInStatus.ATTEMPTED);
+    //     // props.history.push('/login');
+    //     return (
+    //         <Redirect to='/login'/>
+    //     )
+    //     // TODO change route to /login
+    // };
+
 
     const logOut = () => {
         AuthUtil.clearJWTToken();
         props.logOutAction();
+        props.history.push('/');
+        // TODO change route to /
     };
 
     const loginControl = () => {
@@ -27,13 +35,16 @@ function CalorieHeader(props){
                     </a>
                 </Popconfirm>
             );
-            case ELogInStatus.ATTEMPTED : return (
-                <WrappedHorizontalLoginForm/>
-            );
+            case ELogInStatus.ATTEMPTED : return (null);
             default : return (
-                <Button key="1" type="primary" onClick={onLoginClickHandle}>
-                    LogIn
+                <span>
+                    <Button key="1" type="primary" >
+                    <NavLink to='/login'>LogIn</NavLink>
+                </Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <Button key="2" type="primary" >
+                    <NavLink to='/signup'>Sign Up </NavLink>
                 </Button>
+                </span>
             );
         }
     };
@@ -47,8 +58,6 @@ function CalorieHeader(props){
             }}
             extra={loginControl()}>
         </PageHeader>
-
-        {props.children}
         </div>
     );
 }

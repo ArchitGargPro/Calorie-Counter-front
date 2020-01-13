@@ -1,11 +1,13 @@
 import {EAccess, ELogInStatus, ETables} from "../Constants/EAccess";
 import ActionTypes from "./actionTypes";
 import AuthUtil from "../utils/AuthUtil";
+import ERegistrationStatus from "../Constants/ERegistrationStatus";
 
 export const initialState = {
     loginStatus : ELogInStatus.UNATTEMPTED,
     currentTable : ETables.MEAL,
     userAlert : 1,
+    registrationStatus : ERegistrationStatus.DEFAULT,
     access: EAccess.ANONYMOUS
 };
 
