@@ -1,20 +1,16 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Layout} from 'antd';
-import CalorieHeader from "./Components/PageHeader";
-import CalorieSideBar from "./Components/User/SideBar";
-import ContentContainer from "./Components/User/ContentContainer";
+import {BrowserRouter, Route} from "react-router-dom";
+import CalorieHeader from "./Components/Containers/CalorieHeader";
+import HomeContainer from "./Components/Containers/HomeContainer";
 
 function App(){
     return(
-        <div>
-            <CalorieHeader />
-            <Layout>
-                <CalorieSideBar/>
-                <ContentContainer/>
-            </Layout>
-        </div>
-    );
+        <BrowserRouter>
+            <Route path='/'  component={CalorieHeader}/>
+            <Route path='/home' component={HomeContainer} />
+        </BrowserRouter>
+    )
 }
 
 export default App;

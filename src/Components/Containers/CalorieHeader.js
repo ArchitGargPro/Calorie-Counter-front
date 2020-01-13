@@ -1,9 +1,9 @@
 import {Button, PageHeader, Popconfirm} from "antd";
 import React from "react";
-import WrappedHorizontalLoginForm from "./WrappedHorizontalLoginForm";
-import AuthUtil from "../utils/AuthUtil";
-import {ELogInStatus} from "../EAccess";
-import ActionTypes from "../store/actionTypes";
+import WrappedHorizontalLoginForm from "../Forms/WrappedHorizontalLoginForm";
+import AuthUtil from "../../utils/AuthUtil";
+import {ELogInStatus} from "../../Constants/EAccess";
+import ActionTypes from "../../store/actionTypes";
 import {connect} from "react-redux";
 
 
@@ -39,6 +39,7 @@ function CalorieHeader(props){
     };
 
     return(
+        <div>
         <PageHeader
             title="Calorie Counter"
             style={{
@@ -46,6 +47,9 @@ function CalorieHeader(props){
             }}
             extra={loginControl()}>
         </PageHeader>
+
+        {props.children}
+        </div>
     );
 }
 

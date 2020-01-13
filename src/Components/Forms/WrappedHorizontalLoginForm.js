@@ -1,10 +1,10 @@
 import React from "react";
 import {Button, Form, Icon, Input} from "antd";
 import Axios from "axios";
-import AuthUtil from "../utils/AuthUtil";
+import AuthUtil from "../../utils/AuthUtil";
 import {connect} from "react-redux";
-import ActionTypes from "../store/actionTypes";
-import {ELogInStatus} from "../EAccess";
+import ActionTypes from "../../store/actionTypes";
+import {ELogInStatus} from "../../Constants/EAccess";
 
 
 function hasErrors(fieldsError) {

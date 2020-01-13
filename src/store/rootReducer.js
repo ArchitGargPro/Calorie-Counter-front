@@ -1,4 +1,4 @@
-import {EAccess, ELogInStatus, ETables} from "../EAccess";
+import {EAccess, ELogInStatus, ETables} from "../Constants/EAccess";
 import ActionTypes from "./actionTypes";
 import AuthUtil from "../utils/AuthUtil";
 

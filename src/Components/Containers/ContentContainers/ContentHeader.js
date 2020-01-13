@@ -1,10 +1,10 @@
 import {Button, DatePicker, Dropdown, Icon, Menu, TimePicker} from "antd";
 import React, {useEffect, useState} from "react";
-import WrappedNewItemForm from "../NewItemForm";
+import WrappedNewItemForm from "../../Forms/NewItemForm";
 import Modal from "antd/es/modal";
 import {connect} from "react-redux";
 import moment from "moment";
-import {ETables} from "../../EAccess";
+import {ETables} from "../../../Constants/EAccess";
 import Search from "antd/es/input/Search";
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';

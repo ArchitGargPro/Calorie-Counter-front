@@ -1,6 +1,6 @@
 class AuthUtil {
     static jwttoken;
-    static user = null ;
+    static user = undefined ;
 
     static getHeaders() {
         return {
@@ -14,15 +14,16 @@ class AuthUtil {
 
     static getUser() {
         // console.log(localStorage.getItem("user"));
-        return this.user || localStorage.getItem("user");
+        // return this.user || localStorage.getItem("user");
+        return localStorage.getItem('user') ?  localStorage.getItem('user') : undefined;
     }
 
      static clearJWTToken() {
         this.jwttoken = null;
         localStorage.setItem("jwttoken", "");
 
-         this.user = null;
-         localStorage.setItem("user", null);
+         this.user = undefined;
+         localStorage.removeItem("user");
     }
 
      static setJWTToken(jwttoken, user) {

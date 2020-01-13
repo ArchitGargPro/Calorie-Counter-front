@@ -1,5 +1,5 @@
 import React from "react";
-import EditableFormTable from "./EditableTable";
+import EditableFormTable from "../../EditableTable";
 
 function CalorieContentTable(props) {
     return(

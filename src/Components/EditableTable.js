@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from "react";
 import {Form, Input, InputNumber, Popconfirm, Tag, Table} from "antd";
-import {EAccess, Accesses, ETables, ELogInStatus} from "../../EAccess";
-import AuthUtil from "../../utils/AuthUtil";
+import {EAccess, Accesses, ETables, ELogInStatus} from "../Constants/EAccess";
+import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
 import {connect} from "react-redux";
 

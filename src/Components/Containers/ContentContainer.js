@@ -1,9 +1,9 @@
-import CalorieContentHeader from "./ContentHeader";
-import CalorieContentTable from "./ContentTable";
+import CalorieContentHeader from "./ContentContainers/ContentHeader";
+import CalorieContentTable from "./ContentContainers/ContentTable";
 import {Layout} from "antd";
 import React, {useState} from "react";
 import {connect} from "react-redux";
-import {EAccess, ELogInStatus, ETables} from "../../EAccess";
+import {EAccess, ELogInStatus, ETables} from "../../Constants/EAccess";
 import ActionTypes from "../../store/actionTypes";
 import AuthUtil from "../../utils/AuthUtil";
 const {Header, Content} = Layout;

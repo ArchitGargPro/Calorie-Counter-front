@@ -1,8 +1,8 @@
 import {Form, Input, Button} from 'antd';
 import React from "react";
-import {ETables} from "../EAccess";
+import {ETables} from "../../Constants/EAccess";
 import {connect} from "react-redux";
-import AuthUtil from "../utils/AuthUtil";
+import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 
 function NewItemForm(props) {
