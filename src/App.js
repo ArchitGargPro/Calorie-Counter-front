@@ -16,13 +16,13 @@ function App(){
                 <Route exact path='/login' component={LogInComponent}/>
                 <Route exact path='/signup' component={SignUpComponent}/>
                 <Route exact path='/home' component={HomeContainer}/>
-                {/**/}
-                {/*<Route exact path='/user' component={} />*/}
+                {/*<Route exact path='/user/add' component={} />*/}
                 {/*<Route exact path='/user/:userId/' component={}/>*/}
                 {/*<Route exact path='/user/:userId/update/' component={} />*/}
-                {/*<Route exact path='user/:userId/meals' component={}/>*/}
-                {/*<Route exact path='user/:userId/meals/:mealId' component={} />*/}
-                {/*<Route exact path='user/:userId/meal/:mealId/update' component={} />*/}
+                {/* /meal */}
+                {/* /meal/:mealid */}
+                {/*<Route exact path='user/:userId/meal/' component={}/>*/}
+                {/*<Route exact path='meal/:mealId/update' component={} />*/}
             </Switch>
 
         </BrowserRouter>

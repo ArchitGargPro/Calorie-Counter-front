@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="apple">
     <words>
+      <w>axios</w>
       <w>jwttoken</w>
       <w>loggedin</w>
       <w>signup</w>
