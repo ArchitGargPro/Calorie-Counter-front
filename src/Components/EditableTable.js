@@ -4,6 +4,7 @@ import {EAccess, Accesses} from "../Constants/EAccess";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 
 // const EditableContext = React.createContext();
 
@@ -160,6 +161,20 @@ function EditableTable() {
                 editable: true,
                 inputType: 'number'
             },
+            {
+                title: '',
+                dataIndex: '',
+
+
+                render: (record) => {
+                    const pk = record.userName;
+                    console.log('recordksfsdjkf', record);
+                    return (
+                        <Link to={`/user/${pk}`}>View</Link>
+                    );
+                    }
+                },
+
             // {
             //     title: '',
             //     dataIndex: '',
@@ -212,7 +227,7 @@ function EditableTable() {
         // console.log('data',data);
         getUserData();
         console.log('data, ', data);
-    });
+    }, []);
 
     // // Update data on update of dateFilter
     // useEffect(() => {
@@ -323,11 +338,13 @@ function EditableTable() {
     // };
 
     const getUserData = async () => {
-        const url = 'http://localhost:3000/user/';
+        const url = 'http://192.168.0.146:3000/user?page=1&limit=10';
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
-        if(response.data.success) {
-            const d = response.data.data;
+        console.log('<<<<<<<<<<<<<<<<<<respone>>>>>>>>>>>>>>>', response);
+        if(response.data.success ) {
+            const d = response.data.data.items;
+            console.log(d);
             setData(d);
         } else {
             alert(response.data.message);
@@ -433,8 +450,8 @@ function EditableTable() {
 
 // const EditableFormTable = Form.create()(EditableTable);
 
-const mapStateToProps = state => ({
-    currentTable: state.currentTable
-});
+// const mapStateToProps = state => ({
+//     currentTable: state.currentTable
+// });
 
-export default connect(mapStateToProps)(EditableTable);
+export default EditableTable;

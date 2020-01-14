@@ -5,7 +5,7 @@ import AuthUtil from "../../utils/AuthUtil";
 import {ELogInStatus} from "../../Constants/EAccess";
 import ActionTypes from "../../store/actionTypes";
 import {connect} from "react-redux";
-import {NavLink, Redirect} from "react-router-dom";
+import {Link, NavLink, Redirect} from "react-router-dom";
 
 function CalorieHeader(props){
     // const onLoginClickHandle = () =>{
@@ -25,11 +25,13 @@ function CalorieHeader(props){
         // TODO change route to /
     };
 
+
+
     const loginControl = () => {
         switch(props.loginStatus) {
             case ELogInStatus.LOGGEDIN : return (
                 <Popconfirm title="Sure to Log Out?" onConfirm={logOut}>
-                    <h3>Welcome, {AuthUtil.getUser().name}</h3>
+                    <Link to={`/user/${AuthUtil.getUser().userName}`}><h3>Welcome, {AuthUtil.getUser().name}</h3></Link>
                     <a key="1" type="primary">
                         LogOut
                     </a>

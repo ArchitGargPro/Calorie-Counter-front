@@ -14,7 +14,7 @@ function NormalLoginForm (props) {
         e.preventDefault();
         props.form.validateFields( async (err, values) => {
             console.log('asdasd', values);
-            const url = 'http://localhost:3000/user/login';
+            const url = 'http://192.168.0.146:3000/user/login';
             if(!err){
                 const response = await Axios.post(url, values);
                 if(response.data.success === true){
