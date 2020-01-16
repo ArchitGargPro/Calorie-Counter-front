@@ -3,22 +3,19 @@ import React from "react";
 import Axios from "axios";
 import {ELogInStatus} from "../../Constants/EAccess";
 import AuthUtil from "../../utils/AuthUtil";
-import {Redirect, withRouter} from 'react-router-dom';
+import {Link, Redirect, withRouter} from 'react-router-dom';
 import ActionTypes from "../../store/actionTypes";
 import {connect} from "react-redux";
 
 
 function NormalLoginForm (props) {
-    console.log('sdsad', props)
     const handleSubmit = e => {
         e.preventDefault();
         props.form.validateFields( async (err, values) => {
-            console.log('asdasd', values);
-            const url = 'http://192.168.0.146:3000/user/login';
+            const url = 'http://localhost:3000/user/login';
             if(!err){
                 const response = await Axios.post(url, values);
                 if(response.data.success === true){
-                    console.log('response user', response.data);
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);
                     props.setLoginStatusAction(ELogInStatus.LOGGEDIN);
                     props.history.push('/home');
@@ -59,13 +56,10 @@ function NormalLoginForm (props) {
                         valuePropName: 'checked',
                         initialValue: true,
                     })}
-                    <a className="login-form-forgot" href="">
-                        Forgot password
-                    </a> <br/>
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{width : '100%'}}>
                         Log in
                     </Button> <br/>
-                    Or <a href="">register now!</a><br/>
+                    Or <Link to='/signup'>register now!</Link><br/>
 
                 </Form.Item>
             </Form>

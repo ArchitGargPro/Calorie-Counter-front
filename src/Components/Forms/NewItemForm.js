@@ -15,9 +15,7 @@ function NewItemForm(props) {
             url = "http://localhost:3000/user/new"
         }
         const headers = AuthUtil.getHeaders();
-        console.log(values);
         const response = await Axios.post(url, values, {"headers":headers});
-        console.log(response);
         if(response.data.success) {
             props.setVisible(false);
             props.setNewRowAlert(true);

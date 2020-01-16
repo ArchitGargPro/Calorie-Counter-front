@@ -50,7 +50,7 @@ import {Link} from "react-router-dom";
 //     return (<EditableContext.Consumer>{renderCell}</EditableContext.Consumer>);
 // }
 
-function EditableTable() {
+function TableUser() {
     const columnSet ={
         // meal: [
         //     {
@@ -168,7 +168,6 @@ function EditableTable() {
 
                 render: (record) => {
                     const pk = record.userName;
-                    console.log('recordksfsdjkf', record);
                     return (
                         <Link to={`/user/${pk}`}>View</Link>
                     );
@@ -226,7 +225,6 @@ function EditableTable() {
     useEffect(() => {
         // console.log('data',data);
         getUserData();
-        console.log('data, ', data);
     }, []);
 
     // // Update data on update of dateFilter
@@ -338,12 +336,12 @@ function EditableTable() {
     // };
 
     const getUserData = async () => {
-        const url = 'http://192.168.0.146:3000/user?page=1&limit=10';
+        const url = 'http://localhost:3000/user?page=1&limit=10';
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
-        console.log('<<<<<<<<<<<<<<<<<<respone>>>>>>>>>>>>>>>', response);
+        // console.log('<<<<<<<<<<<<<<<<<<respone>>>>>>>>>>>>>>>', response);
         if(response.data.success ) {
-            const d = response.data.data.items;
+            const d = response.data.data;
             console.log(d);
             setData(d);
         } else {
@@ -448,10 +446,10 @@ function EditableTable() {
     );
 }
 
-// const EditableFormTable = Form.create()(EditableTable);
+// const EditableFormTable = Form.create()(TableUser);
 
 // const mapStateToProps = state => ({
 //     currentTable: state.currentTable
 // });
 
-export default EditableTable;
+export default TableUser;

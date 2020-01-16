@@ -6,6 +6,9 @@ import {connect} from "react-redux";
 import moment from "moment";
 import {ETables} from "../../../Constants/EAccess";
 import Search from "antd/es/input/Search";
+import AddMealFormComponent from "../../Forms/AddMealFormComponent";
+import AddUserFormComponent from "../../Forms/AddUserFormComponent";
+import {Link} from 'react-router-dom';
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';
 
@@ -64,7 +67,6 @@ function CalorieContentHeader(props) {
     };
 
     const setTimeFilterAlert = () => {
-        console.log();
     };
 
     const showModal = () => {
@@ -76,14 +78,12 @@ function CalorieContentHeader(props) {
     };
 
     const searchHandle = (value) => {
-        console.log(value);
     };
 
     const setHeader = () => {
-        console.log(props.currentTable);
         if (props.currentTable === ETables.MEAL) {
             return (
-                <div>
+                <span>
                     <Dropdown overlay={menu} >
                         <Button style={{marginRight:'20px'}}>
                             {filter}<Icon type="down" />
@@ -96,7 +96,7 @@ function CalorieContentHeader(props) {
                         onChange={setDateFilterAlert} />
                     <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time" onChange={setTime1}/>
                     <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
-                </div>
+                </span>
             );
         } else {
             return (
@@ -111,10 +111,8 @@ function CalorieContentHeader(props) {
         <span>
             {setHeader()}
             <span style={{float:'right'}}>
-                <Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} onClick={showModal} />
-                <Modal visible={visible} footer={null} onCancel={hideModal}>
-                    <WrappedNewItemForm setVisible={setVisible} setNewRowAlert={props.setNewRowAlert}/>
-                </Modal>
+                <Link to={(props.currentTable === ETables.MEAL)? '/new/meal' : '/new/user'} ><Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} /></Link>
+
             </span>
         </span>
     );

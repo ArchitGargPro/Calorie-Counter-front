@@ -13,7 +13,6 @@ function ContentContainer (props) {
     const [timeFilter, setTimeFilter] = useState(null);
     const [newRowAlert, setNewRowAlert] = useState(false);
 
-    console.log(props);
     if(props.loginStatus !== ELogInStatus.LOGGEDIN){
         return (
             <Layout>

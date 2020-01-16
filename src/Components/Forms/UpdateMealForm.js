@@ -4,7 +4,7 @@ import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 
 function UpdateForm(props) {
-    props.data.password = ''
+    // props.data.password = ''
     const [data, setData] = useState(props.data);
     const [password2, setPassword2] = useState('');
 
@@ -15,13 +15,13 @@ function UpdateForm(props) {
 
 
     //send the data to the backend
-    const updateSingleUserData = async () => {
+    const updateSingleMealData = async () => {
         const url = 'http://localhost:3000/user/' + userName + '/update';
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         if (response.data.success) {
-          //redirect to the view page
+            //redirect to the view page
         } else {
             alert(response.data.message);
         }
@@ -73,35 +73,31 @@ function UpdateForm(props) {
         <div>
             {data ?
                 (<Form layout='inline' onSubmit={handleSubmit}>
-        <Form.Item label="userName">
-            <Input value={data.userName} name='userName' type='text' onChange={handleChange} />
-        </Form.Item> <br/>
-        <Form.Item label="New Password">
-            <Input.Password value={data.password} name='password' type='text' onChange={handleChange}/>
-        </Form.Item> <br/>
-        <Form.Item label="Check Password">
-            <Input.Password value={password2} name='password' type='text' onChange={checkPassword}/>
-        </Form.Item> <br/>
-        <Form.Item label="Name">
-            <Input value={data.name} name='name' type='text' onChange={handleChange}/>
-        </Form.Item><br/>
-        <Form.Item label="Access">
-           <Input value={data.access} name='access' type='number' onChange={handleChange}/>
-        </Form.Item><br/>
-        <Form.Item label="Calories">
-          <Input value={data.calorie} name="calorie" type='number' onChange={handleChange}/>
-        </Form.Item><br/>
-        <Form.Item>
-            <Button type="primary" htmlType="submit">
-                Submit
-            </Button>
-        </Form.Item><br/>
-    </Form>):
+                    <Form.Item label="title">
+                        <Input value={data.title} name='title' type='text' onChange={handleChange} />
+                    </Form.Item> <br/>
+                    <Form.Item label="calorie">
+                        <Input value={data.calorie} name='calorie' type='text' onChange={handleChange}/>
+                    </Form.Item><br/>
+                    <Form.Item label="date">
+                        <Input value={data.date} name='date' type='number' onChange={handleChange}/>
+                    </Form.Item><br/>
+                    <Form.Item label="time">
+                        <Input value={data.time} name="time" type='number' onChange={handleChange}/>
+                    </Form.Item><br/>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Submit
+                        </Button>
+                    </Form.Item><br/>
+                </Form>):
                 (<h1>loading</h1>)
             }
         </div>);
 }
 
-const UpdateUserForm = Form.create({ name: 'register' })(UpdateForm);
+const UpdateMealForm = Form.create({ name: 'register' })(UpdateForm);
 
-export default UpdateUserForm;
+export default UpdateMealForm;
+
+

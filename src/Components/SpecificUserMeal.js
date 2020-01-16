@@ -4,7 +4,7 @@ import {Table} from "antd";
 import AuthUtil from "../utils/AuthUtil";
 
 function SpecificUserMeal(props) {
-    console.log('specific user>>>>>>>>>>>>>', props);
+    // console.log('specific user>>>>>>>>>>>>>', props.location.props.userName);
     const columnSet = {
         meal: [
             {
@@ -35,25 +35,25 @@ function SpecificUserMeal(props) {
 
     useEffect(() => {
         // console.log('data',data);
-        // getMealData();
+        getMealData();
         console.log('data, ', data);
     }, []);
 
-    // const getMealData = async () => {
-    //     const url = 'http://192.168.0.146:3000/meal/of/userName';
-    //     const header = AuthUtil.getHeaders();
-    //     const response = await Axios.get(url, {"headers":header});
-    //     if(response.data.success) {
-    //         const d = response.data.data;
-    //         setData(d);
-    //     } else {
-    //         if(response.data.message === "no meals found") {
-    //             setData(null);
-    //         } else {
-    //             alert(response.data.message);
-    //         }
-    //     }
-    // };
+    const getMealData = async () => {
+        const url = 'http://localhost:3000/meal/of/'; // +  props.location.props.userName;
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.get(url, {"headers":header});
+        if(response.data.success) {
+            const d = response.data.data;
+            setData(d);
+        } else {
+            if(response.data.message === "no meals found") {
+                setData(null);
+            } else {
+                alert(response.data.message);
+            }
+        }
+    };
 
     return (<Table
         dataSource={data}
