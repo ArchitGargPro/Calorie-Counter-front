@@ -16,9 +16,16 @@ function NormalLoginForm (props) {
             if(!err){
                 const response = await Axios.post(url, values);
                 if(response.data.success === true){
+                    console.log('logedskdjkljsklds>>>>>>>>>>>>>>>>>>>>', response.data.data.user);
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);
                     props.setLoginStatusAction(ELogInStatus.LOGGEDIN);
-                    props.history.push('/home');
+                    if( AuthUtil.getUser().access === 1){
+                        props.history.push('/me/meal');
+                    }
+                    else{
+                        props.history.push('/home');
+                    }
+
                 }else{
                     alert(response.data.message);
                 }

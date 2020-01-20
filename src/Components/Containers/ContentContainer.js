@@ -1,5 +1,5 @@
 import CalorieContentHeader from "./ContentContainers/ContentHeader";
-import CalorieContentTable from "./ContentContainers/ContentTable";
+import CalorieContentTable from "./ContentContainers/ContentContentTable";
 import {Layout} from "antd";
 import React, {useState} from "react";
 import {connect} from "react-redux";

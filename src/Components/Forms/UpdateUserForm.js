@@ -2,26 +2,30 @@ import {Button, Form, Input} from "antd";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
-
+import {withRouter} from 'react-router-dom';
 function UpdateForm(props) {
+    console.log('<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>', props);
     props.data.password = ''
     const [data, setData] = useState(props.data);
     const [password2, setPassword2] = useState('');
 
-    console.log('<<<<<<<<<<<<<<<<<<<datadatafdsafdsafd', data);
 
-
-    const userName = data.userName;
-
+    //userName is passed via data, which is perfect as /me/update and /user/<userID>/update can both access them..
+    const userName = data.userName;  //get the userName from the data passed from the update Component
 
     //send the data to the backend
     const updateSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/' + userName + '/update';
+        const url = 'http://localhost:3000/user/update';
+
         const header = AuthUtil.getHeaders();
-        const response = await Axios.get(url, {"headers": header});
+        //Todo put request not working.....
+        const response = await Axios.put(url,  data,{"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
+        // props.history.goBack()
         if (response.data.success) {
-          //redirect to the view page
+           //Todo redirect to the View of user
+            props.history.goBack()
+
         } else {
             alert(response.data.message);
         }
@@ -59,9 +63,9 @@ function UpdateForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('clicked>>>>>>>>>>>>>>>>>>', e);
-        console.log(data);
-
+        // console.log('clicked>>>>>>>>>>>>>>>>>>', e);
+        // console.log(data);
+        updateSingleUserData();
 
         // updateSingleUserData();
 
@@ -72,10 +76,12 @@ function UpdateForm(props) {
     return (
         <div>
             {data ?
+
                 (<Form layout='inline' onSubmit={handleSubmit}>
-        <Form.Item label="userName">
-            <Input value={data.userName} name='userName' type='text' onChange={handleChange} />
-        </Form.Item> <br/>
+                        <h1> Update @{data.userName} </h1>
+        {/*<Form.Item label="userName">*/}
+        {/*    <Input value={data.userName} name='userName' type='text' onChange={handleChange} />*/}
+        {/*</Form.Item> <br/>*/}
         <Form.Item label="New Password">
             <Input.Password value={data.password} name='password' type='text' onChange={handleChange}/>
         </Form.Item> <br/>
@@ -96,7 +102,8 @@ function UpdateForm(props) {
                 Submit
             </Button>
         </Form.Item><br/>
-    </Form>):
+    </Form>
+               ):
                 (<h1>loading</h1>)
             }
         </div>);
@@ -104,4 +111,4 @@ function UpdateForm(props) {
 
 const UpdateUserForm = Form.create({ name: 'register' })(UpdateForm);
 
-export default UpdateUserForm;
+export default withRouter(UpdateUserForm);

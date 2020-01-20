@@ -1,8 +1,7 @@
 import {Form, Input, Button} from 'antd';
-import {ETables} from "../../Constants/EAccess";
 import React, {useEffect, useState} from "react";
-import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
+import AuthUtil from "../../utils/AuthUtil";
 
 function AddMealForm(props) {
 
@@ -15,10 +14,11 @@ function AddMealForm(props) {
     });
     const [password2, setPassword2] = useState('');
 
-    const userName = props.match.params.userId;
-    //this userName is send when a admin creates meal for a  user.... named userName,
 
+    const userName = AuthUtil.getUser().userName;
 
+    //when creating the new meal the data is send to backend , with the userName of user ,
+    // instead of any user as passed by admin when creating a meal
 
     //send the data to the backend
     const addMealData = async (values) => {
@@ -26,7 +26,7 @@ function AddMealForm(props) {
         const headers = AuthUtil.getHeaders();
         const response = await Axios.post(url, values, {"headers": headers});
         if (response.data.success) {
-
+            console.log(response)
         } else {
             alert(response.data.message);
         }
@@ -96,8 +96,10 @@ function AddMealForm(props) {
         </div>);
 }
 
-const AddMealFormComponent = Form.create({ name: 'register' })(AddMealForm);
 
-export default AddMealFormComponent;
+
+const CreateUserMealComponent = Form.create({ name: 'register' })(AddMealForm);
+
+export default CreateUserMealComponent;
 
 

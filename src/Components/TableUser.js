@@ -341,7 +341,7 @@ function TableUser() {
         const response = await Axios.get(url, {"headers":header});
         // console.log('<<<<<<<<<<<<<<<<<<respone>>>>>>>>>>>>>>>', response);
         if(response.data.success ) {
-            const d = response.data.data;
+            const d = response.data.data.items;
             console.log(d);
             setData(d);
         } else {
@@ -440,6 +440,7 @@ function TableUser() {
                 // bordered
                 dataSource={data}
                 columns={columnSet.user}
+                rowKey="name"
                 // rowClassName="editable-row"
                 // pagination={}
             />

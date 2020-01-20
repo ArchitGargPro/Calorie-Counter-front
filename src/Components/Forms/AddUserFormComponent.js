@@ -2,9 +2,9 @@ import {Button, Form, Input} from "antd";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
+import {withRouter} from 'react-router-dom';
 
 function AddUserForm(props) {
-
     const [data, setData] = useState({
         name: undefined,
         userName : '',
@@ -14,15 +14,15 @@ function AddUserForm(props) {
     });
     const [password2, setPassword2] = useState('');
 
-
     //send the data to the backend
     const AddSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/';
+        const url = 'http://localhost:3000/user/new';
         const header = AuthUtil.getHeaders();
-        const response = await Axios.get(url, {"headers": header});
+        const response = await Axios.post(url, data,{"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         if (response.data.success) {
             //redirect to the view page
+            props.history.push('/home');
         } else {
             alert(response.data.message);
         }
@@ -54,8 +54,6 @@ function AddUserForm(props) {
         }else{
             alert('error, password dont match')
         }
-
-
     }
 
     const handleSubmit = (e) => {
@@ -63,9 +61,7 @@ function AddUserForm(props) {
         console.log('clicked>>>>>>>>>>>>>>>>>>', e);
         console.log(data);
 
-
-        // updateSingleUserData();
-
+        AddSingleUserData()
 
     };
     // const {getFieldDecorator} = props.form;
@@ -105,89 +101,8 @@ function AddUserForm(props) {
 
 const AddUserFormComponent = Form.create({ name: 'register' })(AddUserForm);
 
-export default AddUserFormComponent;
+export default withRouter(AddUserFormComponent);
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// import {Form, Input, Button} from 'antd';
-// import React from "react";
-// import {ETables} from "../../Constants/EAccess";
-// import {connect} from "react-redux";
-// import AuthUtil from "../../utils/AuthUtil";
-// import Axios from "axios";
-//
-// function AddUserFormComponent(props) {
-//
-//     const addNewData = async (values) => {
-//         let url;
-//         if (props.currentTable === ETables.MEAL) {
-//             url = "http://localhost:3000/meal/new";
-//         } else {
-//             url = "http://localhost:3000/user/new"
-//         }
-//         const headers = AuthUtil.getHeaders();
-//         const response = await Axios.post(url, values, {"headers": headers});
-//         if (response.data.success) {
-//             props.setVisible(false);
-//             props.setNewRowAlert(true);
-//         } else {
-//             alert(response.data.message);
-//         }
-//     };
-//
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-//         props.form.validateFieldsAndScroll(async (err, values) => {
-//             if (!err) {
-//                 await addNewData(values);
-//             }
-//         });
-//     };
-//
-//
-//     return(
-//         <Form layout='inline' onSubmit={handleSubmit}>
-//         <Form.Item label="userName">
-//             <Input type='text'/>
-//         </Form.Item>
-//             <Form.Item label="Name">
-//                 <Input type='text'/>
-//             </Form.Item>
-//             <Form.Item label="password">
-//                 <Input type='password'/>
-//             </Form.Item>
-//             <Form.Item label="confirm-password">
-//                 <Input type='password'/>
-//             </Form.Item>
-//             <Form.Item label="Access">
-//                 <Input type='text'/>
-//             </Form.Item>
-//             <Form.Item label="password">
-//                 <Input type='text'/>
-//             </Form.Item>
-//             <Form.Item label="Expected Calorie">
-//                 <Input type='text'/>
-//             </Form.Item>
-//             <Form.Item>
-//                 <Button type="primary" htmlType="submit">
-//                     Submit
-//                 </Button>
-//             </Form.Item>
-//         </Form>
-//     )
-//
-// };
-//
-// export default AddUserFormComponent;

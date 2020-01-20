@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
-import AuthUtil from "../utils/AuthUtil";
+import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 import {Avatar, Button, Descriptions, Form, Input} from "antd";
-import UpdateMealForm from "./Forms/UpdateMealForm";
-function UpdateMealComponent(props) {
+import UpdateMealForm from "../Forms/UpdateMealForm";
+
+
+
+function UpdateUserSingleMealComponent(props) {
     const mealId = props.match.params.mealId;
-    const userName = props.match.params.userId;
+    const userName = AuthUtil.getUser().userName;
     console.log(mealId, userName);
 
     const [data, setData] = useState({
@@ -56,4 +59,4 @@ function UpdateMealComponent(props) {
 
 
 
-export default UpdateMealComponent;
+export default UpdateUserSingleMealComponent;

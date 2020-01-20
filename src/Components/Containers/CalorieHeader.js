@@ -37,7 +37,7 @@ function CalorieHeader(props){
                     </a>
                 </Popconfirm>
             );
-            case ELogInStatus.ATTEMPTED : return (null);
+            case ELogInStatus.ATTEMPTED : return ( null );
             default : return (
                 <span>
                     <Button key="1" type="primary" >

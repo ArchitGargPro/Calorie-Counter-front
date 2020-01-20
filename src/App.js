@@ -8,16 +8,27 @@ import LogInComponent from "./Components/Containers/LogInComponent";
 import SignUpComponent from "./Components/Containers/SignUpComponent";
 import ViewUserComponent from "./Components/ViewUserComponent";
 import UpdateUserComponent from "./Components/UpdateUserComponent";
-import TableMeal from "./Components/TableMeal";
-import SpecificUserMeal from "./Components/SpecificUserMeal";
 import NotAuthorised from "./Components/NotAuthorised";
 import AddUserFormComponent from "./Components/Forms/AddUserFormComponent";
 import AddMealFormComponent from "./Components/Forms/AddMealFormComponent";
-import UserRoute from "./Components/Route/UserRoute";
-import ManagerRoute from "./Components/Route/ManagerRoute";
-import AdminRoute from "./Components/Route/AdminRoute";
+import PrivateRoute from "./Components/Route/PrivateRoute";
 import ViewMealComponent from "./Components/ViewMealComponent";
 import UpdateMealComponent from "./Components/UpdateMealComponent";
+import ActiveUserProfileView from "./Components/ActiveUser/ActiveUserProfileView";
+import ActiveUserProfileUpdate from "./Components/ActiveUser/ActiveUserProfileUpdate";
+import CreateUserMealComponent from "./Components/UserComponent/CreateUserMealComponent";
+import ViewUserSingleMealComponent from "./Components/UserComponent/ViewUserSingleMealComponent";
+import UpdateUserSingleMealComponent from "./Components/UserComponent/UpdateUserSingleMealComponent";
+import MealComponent from "./Components/MealsComponent/MealComponent";
+
+//Todo {
+// in /meal, /meal/id, and /meal/update,
+//     i have to check for the admin and user,
+//     and respective give access and send userName instead of AuthUtil.getUser().userName to backend
+//
+// }
+
+
 
 function App(){
     return(
@@ -28,41 +39,31 @@ function App(){
                 <Route exact path='/login' component={LogInComponent}/>
                 <Route exact path='/signup' component={SignUpComponent}/>
 
-
                 {/* shows user data else meal data if a plain user, using TableMeal and TableUser */}
-                <Route exact accessArray={[1, 3]} path='/home' component={HomeContainer}/>
+                <PrivateRoute exact accessArray={[1, 3]} path='/home' component={HomeContainer}/>
 
-                {/* for admin to view all meals of a user */}
-                <Route exact path='/user/:userId/meal' component={TableMeal} />
+                <PrivateRoute exact accessArray={[2,3]} path='/new/user' component={AddUserFormComponent} />
+                <PrivateRoute exact accessArray={[2,3]} path='/user/:userId' component={ViewUserComponent}/>
+                <PrivateRoute exact accessArray={[2,3]} path='/user/:userId/meal/new' component={AddMealFormComponent}/>
+                <PrivateRoute exact accessArray={[2,3]} path='/user/:userId/update' component={UpdateUserComponent} />
+                <PrivateRoute exact accessArray={[3]} path='/user/:userId/meal/:mealId' component={ViewMealComponent} />
+                <PrivateRoute exact accessArray={[3]} path='/user/:userId/meal/:mealId/update' component={UpdateMealComponent}/>
 
-                <Route exact path='/user/:userId' component={ViewUserComponent}/>
-                <Route exact path='/user/:userId/update' component={UpdateUserComponent} />
-                <Route exact path='/user/meal' component={TableMeal} />
-                <Route exact path='/not-authorised' component={NotAuthorised}/>
-                <Route exact path='/user/:userId/meals' component={SpecificUserMeal} />
-
-                <Route exact path='/new/meal' component={AddMealFormComponent}/>
-                <Route exact path='/new/user' component={AddUserFormComponent} />
-                <Route exact path='/meal/:mealId/' component={ViewMealComponent}/>
-                <Route exact path='/meal/:mealId/update' component={UpdateMealComponent}/>
-                {/*<Route exact path='/user/:userId/' component={}/>*/}
-                {/*<Route exact path='/user/:userId/' component={}/>*/}
+                <PrivateRoute exact accessArray={[1,2,3]} path='/me' component={ActiveUserProfileView} />
+                <PrivateRoute exact accessArray={[1,2,3]} path='/me/update' component={ActiveUserProfileUpdate} />
+                <PrivateRoute exact accessArray={[3]} path='/meals' component={MealComponent}/>
+                <PrivateRoute exact accessArray={[3]} path='/user/:userId/meal' component={MealComponent} />
 
 
-                {/*/user/:userId*/}
-                {/*/user/add*/}
-                {/*/user/:userId/update*/}
-                {/*/user/:userId/meals*/}
-                {/*/user/:userId/meal/:mealId*/}
-                {/*/user/:userId/meal/add*/}
 
-                {/*<Route exact path='/user/:userId/' component={}/>*/}
-                {/* /meal */}
-                {/* /meal/:mealid */}
-                {/*<Route exact path='user/:userId/meal/' component={}/>*/}
-                {/*<Route exact path='meal/:mealId/update' component={} />*/}
+                <PrivateRoute exact accessArray={[1]} path='/me/new/meal' component={CreateUserMealComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId' component={ViewUserSingleMealComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId/update' component={UpdateUserSingleMealComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/meal' component={MealComponent} />
 
 
+                <PrivateRoute exact accessArray={[1,2,3]} path='/not-authorised' component={NotAuthorised}/>
+                {/*<Route exact path='/user/:userId/meals' component={SpecificUserMeal} />*/}
 
             </Switch>
 

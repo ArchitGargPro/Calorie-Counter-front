@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from "react";
-import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
+import AuthUtil from "../../utils/AuthUtil";
 import {Avatar, Button, Descriptions, Form, Input} from "antd";
-import UpdateUserForm from "./Forms/UpdateUserForm";
+import UpdateUserForm from "../Forms/UpdateUserForm";
 
-function UpdateUserComponent(props) {
-    // console.log('<<<<<<<<<<<???>>>>>>>>>', props);
-    const userName = props.match.params.userId;
-    // console.log(userName);
-
+function ActiveUserProfileUpdate(props) {
+    const userName = AuthUtil.getUser().userName;
     const [data, setData] = useState(null);
-    // console.log('>>>>>>>>>>>>>>data>>>>>>>>>>>>>>', data);
 
     const getSingleUserData = async () => {
         const url = 'http://localhost:3000/user/' + userName;
@@ -44,4 +40,4 @@ function UpdateUserComponent(props) {
 
 
 
-export default UpdateUserComponent;
+export default ActiveUserProfileUpdate;

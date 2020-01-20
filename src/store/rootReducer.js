@@ -1,15 +1,48 @@
 import {EAccess, ELogInStatus, ETables} from "../Constants/EAccess";
 import ActionTypes from "./actionTypes";
 import AuthUtil from "../utils/AuthUtil";
-import ERegistrationStatus from "../Constants/ERegistrationStatus";
+// import ERegistrationStatus from "../Constants/ERegistrationStatus";
 
-export const initialState = {
-    loginStatus : ELogInStatus.UNATTEMPTED,
-    currentTable : ETables.MEAL,
-    userAlert : 1,
-    registrationStatus : ERegistrationStatus.DEFAULT,
-    access: EAccess.ANONYMOUS
+
+const initialStateGenerator = () => {
+    if (AuthUtil.getUser()) {
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<authutil is present>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        const data = JSON.parse(localStorage.getItem('user'));
+        let access;
+        switch (data.access) {
+            case 0: access = EAccess.USER;
+            break;
+            case 1: access = EAccess.MANAGER;
+            break;
+            case 2: access = EAccess.ADMIN;
+            break;
+            default: access = EAccess.ANONYMOUS;
+        }
+
+        return(
+            {
+                loginStatus : ELogInStatus.LOGGEDIN,
+                currentTable : ETables.MEAL,
+                access: access,
+            }
+        );
+
+        }
+    else{
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<nope nope nope>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
+        return(
+            {
+                loginStatus : ELogInStatus.UNATTEMPTED,
+                currentTable : ETables.MEAL,
+                access: EAccess.ANONYMOUS
+            }
+        );
+    }
 };
+
+export const initialState = initialStateGenerator(); //to save state on refresh
+
 
 export function rootReducer(state = initialState, action) {
     if(!action) {
@@ -33,15 +66,8 @@ export function rootReducer(state = initialState, action) {
                 ...state,
                 currentTable: action.payload.currentTable
             };
-        case ActionTypes.NEW_ROW_UPDATE :
-            return {
-                ...state,
-                userAlert: action.payload
-            };
         case ActionTypes.RESET :
-            return {
-                ...initialState
-            };
+            return (initialStateGenerator()); //send the new state, instead of cached one
         default :
             return state;
     }

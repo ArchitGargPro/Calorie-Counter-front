@@ -1,13 +1,14 @@
 
 import React, {useEffect, useState} from "react";
-import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
 import {Avatar, Button, Descriptions} from 'antd';
 import {Link} from "react-router-dom";
-
-function ViewUserComponent(props){
+import AuthUtil from "../../utils/AuthUtil";
+function ActiveUserProfileView(props){
     console.log('<<<<<<<<<<<<<ViewUserComponent', props);
-    const userName = props.match.params.userId;
+    console.log('AuthUtil.getUser())', AuthUtil.getUser());
+    const userName = AuthUtil.getUser().userName;
+    // const userName = props.match.params.userId;
     const [data, setData] = useState(null);
 
     const getSingleUserData = async () => {
@@ -32,32 +33,22 @@ function ViewUserComponent(props){
     // d: 3, userName: "admin2", name: "Admin2", access: 3, calorie: 2000}
     return(
         <div>
-        <Avatar size="large" icon="user" />
+            <Avatar size="large" icon="user" />
             {data ?
-        (<Descriptions title={data.userName}>
-              <Descriptions.Item label="UserName">{data.userName}</Descriptions.Item>
-                <Descriptions.Item label="Name">{data.name}</Descriptions.Item>
-                <Descriptions.Item label="Access">{data.access}</Descriptions.Item>
-                <Descriptions.Item label="Calorie">{data.calorie}</Descriptions.Item>
-        </Descriptions>) :
+                (<Descriptions title={data.userName}>
+                    <Descriptions.Item label="UserName">{data.userName}</Descriptions.Item>
+                    <Descriptions.Item label="Name">{data.name}</Descriptions.Item>
+                    <Descriptions.Item label="Access">{data.access}</Descriptions.Item>
+                    <Descriptions.Item label="Calorie">{data.calorie}</Descriptions.Item>
+                </Descriptions>) :
                 (<h1>Loading</h1>)}
 
-                <span>
+            <span>
                         <Button type="primary">
                             <Link to={props.match.url + '/update'}>
                                 Update
                             </Link>
                         </Button>
-                    &nbsp;&nbsp;&nbsp;
-                    <Button type="primary">
-                        <Link to={props.match.url + '/meal'}>
-                            Meals
-                        </Link>
-                        {/*<Link to={{pathname: props.match.url + '/meal',*/}
-                        {/*props:{*/}
-                        {/*    userName*/}
-                        {/*} }} >Meals</Link>*/}
-                    </Button>
                 </span>
         </div>
 
@@ -66,4 +57,4 @@ function ViewUserComponent(props){
     //on componentMount   call   getSpecificMeal by id
     //Todo show this specific meal based on the id received
 }
-export default ViewUserComponent;
+export default ActiveUserProfileView;

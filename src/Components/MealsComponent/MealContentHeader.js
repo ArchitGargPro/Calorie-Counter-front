@@ -1,18 +1,15 @@
 import {Button, DatePicker, Dropdown, Icon, Menu, TimePicker} from "antd";
 import React, {useEffect, useState} from "react";
-import WrappedNewItemForm from "../../Forms/NewItemForm";
-import Modal from "antd/es/modal";
 import {connect} from "react-redux";
 import moment from "moment";
-import {ETables} from "../../../Constants/EAccess";
+import {ETables} from "../../Constants/EAccess";
 import Search from "antd/es/input/Search";
-import AddMealFormComponent from "../../Forms/AddMealFormComponent";
-import AddUserFormComponent from "../../Forms/AddUserFormComponent";
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import AuthUtil from "../../utils/AuthUtil";
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';
 
-function CalorieContentHeader(props) {
+function MealContentHeader(props) {
     const [filter, setFilter] = useState("Filter");
     const [timeFilter, setTimeFilter] = useState('none');
     const [dateFilter, setDateFilter] = useState( 'none');
@@ -69,19 +66,8 @@ function CalorieContentHeader(props) {
     const setTimeFilterAlert = () => {
     };
 
-    const showModal = () => {
-        setVisible(true);
-    };
-
-    const hideModal = () => {
-        setVisible(false);
-    };
-
-    const searchHandle = (value) => {
-    };
 
     const setHeader = () => {
-        if (props.currentTable === ETables.MEAL) {
             return (
                 <span>
                     <Dropdown overlay={menu} >
@@ -98,22 +84,25 @@ function CalorieContentHeader(props) {
                     <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
                 </span>
             );
-        } else {
-            return (
-                <span  style={{float:'left', margin:'15px'}}>
-                    <Search placeholder="Search by userName" onSearch={searchHandle} enterButton />
-                </span>
-            );
-        }
     };
 
     return(
         <span>
             {setHeader()}
-            <span style={{float:'right'}}>
-                <Link to={(props.currentTable === ETables.MEAL)? '/new/meal' : '/new/user'} ><Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} /></Link>
+            {(props.match.url === '/meals')?
+                null
+                :
+                <span style={{float:'right'}}>
+                {(AuthUtil.getUser().access ===1) ?
+                    (<Link to='/me/new/meal' ><Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} /></Link>)
+                    :
+                    (<Link to={props.match.url + '/new/'} ><Button  type="primary" shape="circle" icon="plus" size="large" visible={(!visible).toString()} /></Link>)
 
+                }
             </span>
+
+            }
+
         </span>
     );
 }
@@ -122,4 +111,4 @@ const mapStateToProps = state => ({
     currentTable: state.currentTable
 });
 
-export default connect(mapStateToProps)(CalorieContentHeader);
+export default connect(mapStateToProps)(withRouter(MealContentHeader));

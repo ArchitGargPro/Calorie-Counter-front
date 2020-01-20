@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 const {Sider} = Layout;
 
 
-function CalorieSideBar(){
+function CalorieMealSideBar(){
     return(
         <Sider width={200} style={{ background: '#fff' }}>
             <Menu
@@ -13,14 +13,14 @@ function CalorieSideBar(){
                 defaultOpenKeys={['sub1']}
                 style={{ height: '100%', borderRight: 0 }}
             >
+
+                <Menu.Item key="1"><a>Home</a></Menu.Item>
                 <Menu.Item key="2"><Link to='/me'>View Profile</Link></Menu.Item>
-                <Menu.Item key="1"><Link to='/home'>All Users</Link></Menu.Item>
-                <Menu.Item key="3"><Link to='/meals'>All Meals</Link></Menu.Item>
 
-
+                <Menu.Item key="2">Expected Calories</Menu.Item>
             </Menu>
         </Sider>
     );
 }
 
-export default CalorieSideBar;
+export default CalorieMealSideBar;

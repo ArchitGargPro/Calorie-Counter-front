@@ -1,21 +1,15 @@
-import React, {useEffect, useState} from "react";
-import Axios from "axios";
-import {Table} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Layout, Table} from "antd";
+import CalorieSideBar from "./Containers/CalorieSideBar";
+import ContentContainer from "./Containers/ContentContainer";
+import {Link} from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
-import {Link, withRouter} from "react-router-dom";
+import Axios from "axios";
 
-//get all meal by a username
-
-//Todo first make for the user , on shown at /home
-// Todo then make for admin to view any user
-
-function TableMeal(props) {
-
-    const userName = props.userName;
-    console.log('<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>}}}}}}}}}}}}}}}', props);
-    //TODO if passed userName then get the data for the that userName, else
-    //else ...
-
+function ViewAllMeals(props) {
+    console.log('<<<<<<<<<<????????????????>>>>>>>>>>>>>>Meals', props);
+    const userName = props.match.params.userId;
+    console.log(userName);
     const columnSet = {
         meal: [
             {
@@ -47,11 +41,7 @@ function TableMeal(props) {
                     const pk = record.id;
                     console.log('<<<<<<<<<<<<<<<<<record>>>>>>>>>>', record);
                     return (
-                        (props.match.url === '/meals') ? null
-                                :
-                                    (<Link to={props.match.url + '/' + pk}>View</Link> )  //{`/meal/${pk}`}
-
-
+                        <Link to={`/meal/${pk}`}>View</Link>
                     );
                 }
             },
@@ -93,19 +83,6 @@ function TableMeal(props) {
         }
         else {
             alert('failed attempt');
-            // const d = {
-            //     "title": "dinner",
-            //     "calorie": "2367",
-            //     "date": "16/1/2020",
-            //     "time": "14:5:46",
-            //     "id": 2
-            // };
-            // setData(d);
-            // if(response.data.message === "no meals found") {
-            //     // setData(null);
-            // } else {
-            //     alert(response.data.message);
-            // }
             const d = [{
                 "title": "dinner",
                 "calorie": "2367",
@@ -130,4 +107,5 @@ function TableMeal(props) {
     />)
 }
 
-export default withRouter(TableMeal);
+export default ViewAllMeals;
+
