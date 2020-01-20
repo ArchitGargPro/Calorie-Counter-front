@@ -6,15 +6,18 @@ import AuthUtil from "../../utils/AuthUtil";
 import {Link, Redirect, withRouter} from 'react-router-dom';
 import ActionTypes from "../../store/actionTypes";
 import {connect} from "react-redux";
+import Paths from "../../Constants/Path";
 
 
 function NormalLoginForm (props) {
     const handleSubmit = e => {
         e.preventDefault();
         props.form.validateFields( async (err, values) => {
-            const url = 'http://localhost:3000/user/login';
+            const url = Paths.local +  'user/login';
             if(!err){
+                console.log('values>>>>>>>>', values);
                 const response = await Axios.post(url, values);
+                console.log(response);
                 if(response.data.success === true){
                     console.log('logedskdjkljsklds>>>>>>>>>>>>>>>>>>>>', response.data.data.user);
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);

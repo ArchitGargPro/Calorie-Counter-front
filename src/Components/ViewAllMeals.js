@@ -5,6 +5,7 @@ import ContentContainer from "./Containers/ContentContainer";
 import {Link} from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
+import Paths from "../Constants/Path";
 
 function ViewAllMeals(props) {
     console.log('<<<<<<<<<<????????????????>>>>>>>>>>>>>>Meals', props);
@@ -70,7 +71,7 @@ function ViewAllMeals(props) {
     }, []);
 
     const getMealData = async () => {
-        const url = 'http://localhost:3000/meal/?page=1&limit=10';
+        const url = Paths.local +  'meal/?page=1&limit=10';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
         //Todo userName is not getted by backend, so showing all the meals....

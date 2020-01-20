@@ -4,15 +4,16 @@ import {ETables} from "../../Constants/EAccess";
 import {connect} from "react-redux";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
+import Paths from "../../Constants/Path";
 
 function NewItemForm(props) {
 
     const addNewData = async (values) => {
         let url;
         if(props.currentTable === ETables.MEAL) {
-            url = "http://localhost:3000/meal/new";
+            url = Paths.local + "meal/new";
         } else {
-            url = "http://localhost:3000/user/new"
+            url =  Paths.local + "user/new"
         }
         const headers = AuthUtil.getHeaders();
         const response = await Axios.post(url, values, {"headers":headers});

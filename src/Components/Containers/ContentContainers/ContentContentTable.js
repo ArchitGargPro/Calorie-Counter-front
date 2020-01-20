@@ -12,8 +12,7 @@ function CalorieContentTable(props) {
     } else {
         return (
             <div>
-                <TableUser dateFilter={props.dateFilter} newRowAlert={props.newRowAlert}
-                           setNewRowAlert={props.setNewRowAlert}/>
+                <TableUser />
             </div>
         );
     }

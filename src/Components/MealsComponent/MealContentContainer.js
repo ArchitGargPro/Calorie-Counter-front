@@ -9,21 +9,17 @@ import {ETables} from "../../Constants/EAccess";
 const {Header, Content} = Layout;
 
 function MealContentContainer (props) {
-    const [dateFilter, setDateFilter] = useState(null);
-    const [timeFilter, setTimeFilter] = useState(null);
-    const [newRowAlert, setNewRowAlert] = useState(false);
+
 
     props.updateCurrentTableAction(ETables.MEAL);
 
     return (
         <Layout>
             <Header>
-                <MealContentHeader setDateFilter={setDateFilter} setTimeFilter={setTimeFilter}
-                                      setNewRowAlert={setNewRowAlert}/>
+                <MealContentHeader />
             </Header>
             <Content>
-                <MealContentTable dateFilter={dateFilter} timeFilter={timeFilter} newRowAlert={newRowAlert}
-                                     setNewRowAlert={setNewRowAlert}/>
+                <MealContentTable />
             </Content>
         </Layout>
     );

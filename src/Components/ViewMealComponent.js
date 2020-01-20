@@ -15,11 +15,12 @@ import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
 import {Avatar, Button, Descriptions} from 'antd';
 import {Link, withRouter} from "react-router-dom";
+import Paths from "../Constants/Path";
 
 function ViewMealComponent(props){
-    console.log('<<<<<<<<<<<params>>>>>>>>>>>', props);
+    // console.log('<<<<<<<<<<<params>>>>>>>>>>>', props);
     const mealId = props.match.params.mealId;
-    console.log(mealId)
+    // console.log(mealId);
 
     const [data, setData] = useState(  {
         title : "",
@@ -30,21 +31,19 @@ function ViewMealComponent(props){
     });
 
     const getSingleMealData = async () => {
-        const url = 'http://localhost:3000/meal/';
+        const url =  Paths.local +  'meal/';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
 
         //Todo not accepting the id passed for getting one id
-        const response = await Axios.get(url, {"headers": header,
+        const response = await Axios.get(url, {'params':{
             'id': mealId,
-            'userName': AuthUtil.getUser().userName,
-
-        });
+        }, "headers": header});
         console.log('//////////', response);
         if (response.data.success) {
-            const d = response.data.data;
+            const d = response.data.data[0];
             setData(d);
-            console.log('????????????', data);
+            // console.log('????????????', data);
         } else {
             alert('failed attempt')
         }

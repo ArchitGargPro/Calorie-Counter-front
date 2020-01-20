@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import {Table} from "antd";
 import AuthUtil from "../utils/AuthUtil";
+import Paths from "../Constants/Path";
 
 function SpecificUserMeal(props) {
     // console.log('specific user>>>>>>>>>>>>>', props.location.props.userName);
@@ -40,7 +41,7 @@ function SpecificUserMeal(props) {
     }, []);
 
     const getMealData = async () => {
-        const url = 'http://localhost:3000/meal/of/'; // +  props.location.props.userName;
+        const url = Paths.local + 'meal/of/'; // +  props.location.props.userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
         if(response.data.success) {

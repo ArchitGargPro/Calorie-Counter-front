@@ -4,6 +4,7 @@ import Axios from "axios";
 import {Avatar, Button, Descriptions} from 'antd';
 import {Link} from "react-router-dom";
 import AuthUtil from "../../utils/AuthUtil";
+import Paths from "../../Constants/Path";
 function ActiveUserProfileView(props){
     console.log('<<<<<<<<<<<<<ViewUserComponent', props);
     console.log('AuthUtil.getUser())', AuthUtil.getUser());
@@ -12,7 +13,7 @@ function ActiveUserProfileView(props){
     const [data, setData] = useState(null);
 
     const getSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/' + userName;
+        const url = Paths.local +  'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
         // console.log('response>>>>>>>>>>>>>>>', response);

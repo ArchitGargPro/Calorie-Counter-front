@@ -6,16 +6,19 @@ import {ETables} from "../../Constants/EAccess";
 import Search from "antd/es/input/Search";
 import {Link, withRouter} from 'react-router-dom';
 import AuthUtil from "../../utils/AuthUtil";
+import ActionTypes from "../../store/actionTypes";
 const { RangePicker } = DatePicker;
 const dateFormat = 'DD/MM/YYYY';
 
 function MealContentHeader(props) {
     const [filter, setFilter] = useState("Filter");
-    const [timeFilter, setTimeFilter] = useState('none');
-    const [dateFilter, setDateFilter] = useState( 'none');
     const [visible, setVisible] = useState(false);
     const [time1, setTime1] = useState(null);
     const [time2, setTime2] = useState(null);
+
+    const [dateFilter, setDateFilter] = useState(null);
+    const [timeFilter, setTimeFilter] = useState(null);
+    const [newRowAlert, setNewRowAlert] = useState(false);
 
     useEffect(() => {
         if(time1 !== null && time2 !== null && time1 !== time2 ) {
@@ -54,12 +57,12 @@ function MealContentHeader(props) {
         if (dates.length === 2) {
             const date1 = moment(dates[0]).format('DD/MM/YYYY');
             const date2 = moment(dates[1]).format('DD/MM/YYYY');
-            props.setDateFilter({
+            setDateFilter({
                 date1: date1,
                 date2: date2
             });
         } else {
-            props.setDateFilter(null);
+            setDateFilter(null);
         }
     };
 
@@ -67,21 +70,31 @@ function MealContentHeader(props) {
     };
 
 
+    const searchHandle = (value) => {
+        alert('clicked')
+    };
+
+
     const setHeader = () => {
             return (
                 <span>
-                    <Dropdown overlay={menu} >
-                        <Button style={{marginRight:'20px'}}>
-                            {filter}<Icon type="down" />
-                        </Button>
-                    </Dropdown>
+                    {/*<Dropdown overlay={menu} >*/}
+                    {/*    <Button style={{marginRight:'20px'}}>*/}
+                    {/*        {filter}<Icon type="down" />*/}
+                    {/*    </Button>*/}
+                    {/*</Dropdown>*/}
                     <RangePicker
                         style={{display:dateFilter}}
                         format={dateFormat}
                         defaultPickerValue={null}
                         onChange={setDateFilterAlert} />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
                     <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="start-time" onChange={setTime1}/>
                     <TimePicker style={{display: timeFilter}} format="HH:mm" placeholder="end-time" onChange={setTime2}/>
+
+                       <span  style={{float:'left', margin:'15px'}}>
+                            <Search placeholder="search" onSearch={searchHandle}  enterButton />
+                        </span>
                 </span>
             );
     };
@@ -107,8 +120,17 @@ function MealContentHeader(props) {
     );
 }
 
+
 const mapStateToProps = state => ({
-    currentTable: state.currentTable
+    mealData : state.mealData
 });
 
-export default connect(mapStateToProps)(withRouter(MealContentHeader));
+const mapDispatchToProps = dispatch => ({
+    updateMealDataAction: mealData => dispatch({
+        type: ActionTypes.SET_MEAL_DATA,
+        payload: {
+            mealData
+        }
+    })
+});
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MealContentHeader));

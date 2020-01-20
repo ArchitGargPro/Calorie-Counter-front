@@ -15,6 +15,7 @@ import Axios from "axios";
 import AuthUtil from "../../utils/AuthUtil";
 import {Avatar, Button, Descriptions} from 'antd';
 import {Link, withRouter} from "react-router-dom";
+import Paths from "../../Constants/Path";
 
 
 function ViewUserSingleMealComponent(props){
@@ -31,7 +32,7 @@ function ViewUserSingleMealComponent(props){
     });
 
     const getSingleMealData = async () => {
-        const url = 'http://localhost:3000/meal/';
+        const url =  Paths.local + 'meal/';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
 

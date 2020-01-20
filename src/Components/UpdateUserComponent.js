@@ -3,6 +3,7 @@ import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
 import {Avatar, Button, Descriptions, Form, Input} from "antd";
 import UpdateUserForm from "./Forms/UpdateUserForm";
+import Paths from "../Constants/Path";
 
 function UpdateUserComponent(props) {
     // console.log('<<<<<<<<<<<???>>>>>>>>>', props);
@@ -13,7 +14,7 @@ function UpdateUserComponent(props) {
     // console.log('>>>>>>>>>>>>>>data>>>>>>>>>>>>>>', data);
 
     const getSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/' + userName;
+        const url =  Paths.local + 'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
         // console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);

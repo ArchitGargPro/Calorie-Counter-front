@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 import {withRouter} from 'react-router-dom';
+import Paths from "../../Constants/Path";
 function UpdateForm(props) {
     console.log('<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>', props);
     props.data.password = ''
@@ -15,7 +16,7 @@ function UpdateForm(props) {
 
     //send the data to the backend
     const updateSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/update';
+        const url =  Paths.local + 'user/update';
 
         const header = AuthUtil.getHeaders();
         //Todo put request not working.....

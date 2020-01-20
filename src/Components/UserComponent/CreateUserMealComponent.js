@@ -2,6 +2,7 @@ import {Form, Input, Button} from 'antd';
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import AuthUtil from "../../utils/AuthUtil";
+import Paths from "../../Constants/Path";
 
 function AddMealForm(props) {
 
@@ -22,7 +23,7 @@ function AddMealForm(props) {
 
     //send the data to the backend
     const addMealData = async (values) => {
-        const url = "http://localhost:3000/meal/new";
+        const url =  Paths.local + "meal/new";
         const headers = AuthUtil.getHeaders();
         const response = await Axios.post(url, values, {"headers": headers});
         if (response.data.success) {

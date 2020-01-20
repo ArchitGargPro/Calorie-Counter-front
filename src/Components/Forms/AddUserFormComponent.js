@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 import {withRouter} from 'react-router-dom';
+import Paths from "../../Constants/Path";
 
 function AddUserForm(props) {
     const [data, setData] = useState({
@@ -16,13 +17,13 @@ function AddUserForm(props) {
 
     //send the data to the backend
     const AddSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/new';
+        const url =  Paths.local + 'user/new';
         const header = AuthUtil.getHeaders();
         const response = await Axios.post(url, data,{"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         if (response.data.success) {
             //redirect to the view page
-            props.history.push('/home');
+            props.history.push('/user/' + response.data.data.userName);
         } else {
             alert(response.data.message);
         }
@@ -49,12 +50,12 @@ function AddUserForm(props) {
     const checkPassword =(e)=>{
         const value = e.target.value;
         setPassword2(value);
-        if(password2 === data.password){
-
-        }else{
-            alert('error, password dont match')
-        }
-    }
+        // if(password2 === data.password){
+        //
+        // }else{
+        //     alert('error, password dont match')
+        // }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();

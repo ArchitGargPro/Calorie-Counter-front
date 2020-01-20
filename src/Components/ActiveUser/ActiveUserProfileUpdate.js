@@ -3,13 +3,14 @@ import Axios from "axios";
 import AuthUtil from "../../utils/AuthUtil";
 import {Avatar, Button, Descriptions, Form, Input} from "antd";
 import UpdateUserForm from "../Forms/UpdateUserForm";
+import Paths from "../../Constants/Path";
 
 function ActiveUserProfileUpdate(props) {
     const userName = AuthUtil.getUser().userName;
     const [data, setData] = useState(null);
 
     const getSingleUserData = async () => {
-        const url = 'http://localhost:3000/user/' + userName;
+        const url =  Paths.local +  'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
         // console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);

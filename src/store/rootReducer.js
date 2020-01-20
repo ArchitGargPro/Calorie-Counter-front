@@ -24,6 +24,9 @@ const initialStateGenerator = () => {
                 loginStatus : ELogInStatus.LOGGEDIN,
                 currentTable : ETables.MEAL,
                 access: access,
+                mealData : null,
+                userData : null,
+
             }
         );
 
@@ -35,7 +38,9 @@ const initialStateGenerator = () => {
             {
                 loginStatus : ELogInStatus.UNATTEMPTED,
                 currentTable : ETables.MEAL,
-                access: EAccess.ANONYMOUS
+                access: EAccess.ANONYMOUS,
+                mealData : null,
+                userData : null,
             }
         );
     }
@@ -65,6 +70,16 @@ export function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 currentTable: action.payload.currentTable
+            };
+        case ActionTypes.SET_MEAL_DATA :
+            return {
+                ...state,
+                mealData: action.payload.mealData
+            };
+        case ActionTypes.SET_USER_DATA :
+            return {
+                ...state,
+                userData : action.payload.userData
             };
         case ActionTypes.RESET :
             return (initialStateGenerator()); //send the new state, instead of cached one

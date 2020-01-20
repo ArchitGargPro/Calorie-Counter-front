@@ -3,30 +3,35 @@ import {ETables} from "../../Constants/EAccess";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
+import Paths from "../../Constants/Path";
 
 function AddMealForm(props) {
 
     const [data, setData] = useState({
         title : "",
         calorie : 0,
-        date  : "dd/mm/yyyy",
-        time : "hh:mm:ss",
-        id: 0,
+        date  : "",
+        time : "",
+        id: '',
     });
-    const [password2, setPassword2] = useState('');
 
-    const userName = props.match.params.userId;
+    const userId = props.match.params.userId;
     //this userName is send when a admin creates meal for a  user.... named userName,
 
 
 
-    //send the data to the backend
-    const addMealData = async (values) => {
-        const url = "http://localhost:3000/meal/new";
+    const addMealData = async () => {
+        const url = Paths.local +  "meal/new";
         const headers = AuthUtil.getHeaders();
-        const response = await Axios.post(url, values, {"headers": headers});
-        if (response.data.success) {
 
+        const d = {...data, 'userName': userId};
+
+
+        const response = await Axios.post(url,d,{"headers": headers});
+        console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
+        if (response.data.success) {
+            //redirect to the view page
+             props.history.push('/user/' + userId + '/meal/');
         } else {
             alert(response.data.message);
         }
@@ -47,25 +52,14 @@ function AddMealForm(props) {
         });
 
         console.log('data, afterr>>>>>>>>>>', data);
-    }
-
-
-    const checkPassword =(e)=>{
-        const value = e.target.value;
-        setPassword2(value);
-        if(password2 === data.password){
-
-        }else{
-            alert('error, password dont match')
-        }
-
-
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('clicked>>>>>>>>>>>>>>>>>>', e);
         console.log(data);
+        addMealData();
 
     };
 

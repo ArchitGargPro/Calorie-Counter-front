@@ -3,6 +3,7 @@ import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 import {Avatar, Button, Descriptions, Form, Input} from "antd";
 import UpdateMealForm from "../Forms/UpdateMealForm";
+import Paths from "../../Constants/Path";
 
 
 
@@ -21,7 +22,7 @@ function UpdateUserSingleMealComponent(props) {
     // console.log('>>>>>>>>>>>>>>data>>>>>>>>>>>>>>', data);
 
     const getSingleMealData = async () => {
-        const url = 'http://localhost:3000/user/' + userName;
+        const url = Paths.local + 'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
