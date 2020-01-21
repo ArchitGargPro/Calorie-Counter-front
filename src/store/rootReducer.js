@@ -26,6 +26,7 @@ const initialStateGenerator = () => {
                 access: access,
                 mealData : null,
                 userData : null,
+                expectedValue : 0,
 
             }
         );
@@ -41,6 +42,8 @@ const initialStateGenerator = () => {
                 access: EAccess.ANONYMOUS,
                 mealData : null,
                 userData : null,
+                expectedValue : 0,
+
             }
         );
     }
@@ -80,6 +83,11 @@ export function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 userData : action.payload.userData
+            };
+        case ActionTypes.SET_EXPECTED_DATA :
+            return {
+                ...state,
+                expectedValue : action.payload.expectedValue
             };
         case ActionTypes.RESET :
             return (initialStateGenerator()); //send the new state, instead of cached one

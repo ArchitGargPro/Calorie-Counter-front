@@ -18,10 +18,10 @@ function TableMeal(props) {
     console.log('<<<<<<<<<<<<<<<tablemeal>>>>>>>>>>>>>>>>>>>>>>>>>', props.props);
 
 
-    const expected = 2000;  // todo  onchange value here
+    // const expected = 2000;  // todo  onchange value here   props.exceptedValue
 
     const getColor = (calorie) => {
-        if (calorie > expected) {
+        if (calorie > props.expectedValue) {  //calorie > exceptedValue
             return 'red';
         }
         return 'green';
@@ -153,7 +153,8 @@ function TableMeal(props) {
 
 
 const mapStateToProps = state => ({
-    mealData : state.mealData
+    mealData : state.mealData,
+   expectedValue : state.expectedValue
 });
 
 const mapDispatchToProps = dispatch => ({
