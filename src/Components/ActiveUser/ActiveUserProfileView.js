@@ -6,14 +6,14 @@ import {Link} from "react-router-dom";
 import AuthUtil from "../../utils/AuthUtil";
 import Paths from "../../Constants/Path";
 function ActiveUserProfileView(props){
-    console.log('<<<<<<<<<<<<<ViewUserComponent', props);
-    console.log('AuthUtil.getUser())', AuthUtil.getUser());
+    // console.log('<<<<<<<<<<<<<ViewUserComponent', props);
+    // console.log('AuthUtil.getUser())', AuthUtil.getUser());
     const userName = AuthUtil.getUser().userName;
     // const userName = props.match.params.userId;
     const [data, setData] = useState(null);
 
     const getSingleUserData = async () => {
-        const url = Paths.local +  'user/' + userName;
+        const url = Paths.home +  'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
         // console.log('response>>>>>>>>>>>>>>>', response);

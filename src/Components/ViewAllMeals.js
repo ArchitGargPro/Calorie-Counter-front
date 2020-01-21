@@ -8,7 +8,7 @@ import Axios from "axios";
 import Paths from "../Constants/Path";
 
 function ViewAllMeals(props) {
-    console.log('<<<<<<<<<<????????????????>>>>>>>>>>>>>>Meals', props);
+    // console.log('<<<<<<<<<<????????????????>>>>>>>>>>>>>>Meals', props);
     const userName = props.match.params.userId;
     console.log(userName);
     const columnSet = {
@@ -71,7 +71,7 @@ function ViewAllMeals(props) {
     }, []);
 
     const getMealData = async () => {
-        const url = Paths.local +  'meal/?page=1&limit=10';
+        const url = Paths.home +  'meal/?page=1&limit=10';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
         //Todo userName is not getted by backend, so showing all the meals....

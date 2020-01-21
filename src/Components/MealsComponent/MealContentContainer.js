@@ -1,9 +1,7 @@
 import {Layout} from "antd";
 import React, {useState} from "react";
-import {connect} from "react-redux";
 import MealContentHeader from "./MealContentHeader";
 import MealContentTable from "./MealContentTable";
-import ActionTypes from "../../store/actionTypes";
 import {ETables} from "../../Constants/EAccess";
 
 const {Header, Content} = Layout;
@@ -11,32 +9,28 @@ const {Header, Content} = Layout;
 function MealContentContainer (props) {
 
 
-    props.updateCurrentTableAction(ETables.MEAL);
+    // props.updateCurrentTableAction(ETables.MEAL);
+
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [search, setSearch] = useState('');
+
 
     return (
         <Layout>
             <Header>
-                <MealContentHeader />
+                <MealContentHeader setStartTime={setStartTime} setEndTime={setEndTime} setStartDate={setStartDate} setEndDate={setEndDate} setSearch={setSearch}/>
             </Header>
             <Content>
-                <MealContentTable />
+                <MealContentTable  startTime={startTime} endTime={endTime} startDate={startDate} endDate={endDate} search={search}  />
             </Content>
         </Layout>
     );
 
 }
 
-const mapStateToProps = state => ({
-    loginStatus : state.loginStatus
-});
 
-const mapDispatchToProps = dispatch => ({
-    updateCurrentTableAction: currentTable => dispatch({
-        type: ActionTypes.SET_CURRENT_TABLE,
-        payload: {
-            currentTable
-        }
-    })
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(MealContentContainer);
+export default (MealContentContainer);

@@ -19,7 +19,7 @@ import Paths from "../../Constants/Path";
 
 
 function ViewUserSingleMealComponent(props){
-    console.log('<<<<<<<<<<<params>>>>>>>>>>>', props);
+    // console.log('<<<<<<<<<<<params>>>>>>>>>>>', props);
     const mealId = props.match.params.mealId;
     console.log(mealId);
 
@@ -32,7 +32,7 @@ function ViewUserSingleMealComponent(props){
     });
 
     const getSingleMealData = async () => {
-        const url =  Paths.local + 'meal/';
+        const url =  Paths.home + 'meal/';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
 

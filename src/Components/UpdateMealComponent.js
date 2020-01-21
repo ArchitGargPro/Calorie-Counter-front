@@ -6,13 +6,13 @@ import UpdateMealForm from "./Forms/UpdateMealForm";
 import Paths from "../Constants/Path";
 function UpdateMealComponent(props) {
     const mealId = props.match.params.mealId;
-    const userName = props.match.params.userId;
-    console.log(mealId);
+    // const userName = props.match.params.userId;
+    //console.log(mealId);
 
     const [data, setData] = useState('');
 
     const getSingleMealData = async () => {
-        const url =  Paths.local +  'meal/';
+        const url =  Paths.home +  'meal/';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
 
@@ -20,11 +20,11 @@ function UpdateMealComponent(props) {
         const response = await Axios.get(url, {'params':{
                 'id': mealId,
             }, "headers": header});
-        console.log('//////////', response);
+        //console.log('//////////', response);
         if (response.data.success) {
             const d = response.data.data[0];
             setData(d);
-            console.log('data',d);
+            //console.log('data',d);
             // console.log('????????????', data);
         } else {
             alert('failed attempt')

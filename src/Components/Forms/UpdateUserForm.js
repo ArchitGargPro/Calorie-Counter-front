@@ -1,22 +1,22 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, notification} from "antd";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
 import {withRouter} from 'react-router-dom';
 import Paths from "../../Constants/Path";
+
 function UpdateForm(props) {
     console.log('<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>', props);
-    props.data.password = ''
+    props.data.password = '';
     const [data, setData] = useState(props.data);
     const [password2, setPassword2] = useState('');
-
 
     //userName is passed via data, which is perfect as /me/update and /user/<userID>/update can both access them..
     const userName = data.userName;  //get the userName from the data passed from the update Component
 
     //send the data to the backend
     const updateSingleUserData = async () => {
-        const url =  Paths.local + 'user/update';
+        const url =  Paths.home + 'user/update';
 
         const header = AuthUtil.getHeaders();
         //Todo put request not working.....
@@ -28,7 +28,12 @@ function UpdateForm(props) {
             props.history.goBack()
 
         } else {
-            alert(response.data.message);
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
+            // alert(response.data.message);
         }
     };
 
@@ -47,26 +52,38 @@ function UpdateForm(props) {
         });
 
         console.log('data, afterr>>>>>>>>>>', data);
-    }
+    };
 
-
-    const checkPassword =(e)=>{
+    const checkPassword = async (e) => {
         const value = e.target.value;
-        setPassword2(value);
-        if(password2 === data.password){
-
-        }else{
-            alert('error, password dont match')
-        }
+        await setPassword2(value);
+    };
 
 
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (password2 === data.password) {
+            if(data.access > 3 || data.access <= 0) {
+                notification.open({
+                    message: 'Illegal Access',
+                    description:
+                        'Access are not 1 , 2 or 3',
+                });
+            }
+                else{
+                    updateSingleUserData();
+                }
+        } else {
+            notification.open({
+                message: 'Password Dont Match',
+                description:
+                    'Both Password are not same',
+            });
+        }
         // console.log('clicked>>>>>>>>>>>>>>>>>>', e);
         // console.log(data);
-        updateSingleUserData();
+
 
         // updateSingleUserData();
 

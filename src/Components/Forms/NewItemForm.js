@@ -11,9 +11,9 @@ function NewItemForm(props) {
     const addNewData = async (values) => {
         let url;
         if(props.currentTable === ETables.MEAL) {
-            url = Paths.local + "meal/new";
+            url = Paths.home + "meal/new";
         } else {
-            url =  Paths.local + "user/new"
+            url =  Paths.home + "user/new"
         }
         const headers = AuthUtil.getHeaders();
         const response = await Axios.post(url, values, {"headers":headers});

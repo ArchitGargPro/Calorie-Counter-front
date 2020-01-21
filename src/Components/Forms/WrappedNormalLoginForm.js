@@ -1,4 +1,4 @@
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, notification } from 'antd';
 import React from "react";
 import Axios from "axios";
 import {ELogInStatus} from "../../Constants/EAccess";
@@ -13,7 +13,7 @@ function NormalLoginForm (props) {
     const handleSubmit = e => {
         e.preventDefault();
         props.form.validateFields( async (err, values) => {
-            const url = Paths.local +  'user/login';
+            const url = Paths.home +  'user/login';
             if(!err){
                 console.log('values>>>>>>>>', values);
                 const response = await Axios.post(url, values);
@@ -23,14 +23,21 @@ function NormalLoginForm (props) {
                     AuthUtil.setJWTToken(response.data.data.jwttoken, response.data.data.user);
                     props.setLoginStatusAction(ELogInStatus.LOGGEDIN);
                     if( AuthUtil.getUser().access === 1){
-                        props.history.push('/me/meal');
+                        props.history.replace('/me/meal');
                     }
                     else{
-                        props.history.push('/home');
+                        props.history.replace('/home');
                     }
 
                 }else{
-                    alert(response.data.message);
+                        notification.open({
+                            message: 'LoggedIn Error',
+                            description:
+                                'response error',
+                            // onClick: () => {
+                            //     console.log('Notification Clicked!');
+                            // },
+                        });
                 }
             }
         });

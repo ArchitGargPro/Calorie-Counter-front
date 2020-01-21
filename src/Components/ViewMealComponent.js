@@ -31,15 +31,16 @@ function ViewMealComponent(props){
     });
 
     const getSingleMealData = async () => {
-        const url =  Paths.local +  'meal/';
+        const url =  Paths.home +  'meal/';
         const header = AuthUtil.getHeaders();
         //for the current user logged in viewing as /home
 
         //Todo not accepting the id passed for getting one id
         const response = await Axios.get(url, {'params':{
             'id': mealId,
+                // 'userName': AuthUtil.getUser().userName,
         }, "headers": header});
-        console.log('//////////', response);
+        // console.log('//////////', response);
         if (response.data.success) {
             const d = response.data.data[0];
             setData(d);

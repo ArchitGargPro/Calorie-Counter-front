@@ -16,9 +16,9 @@ import ViewMealComponent from "./Components/ViewMealComponent";
 import UpdateMealComponent from "./Components/UpdateMealComponent";
 import ActiveUserProfileView from "./Components/ActiveUser/ActiveUserProfileView";
 import ActiveUserProfileUpdate from "./Components/ActiveUser/ActiveUserProfileUpdate";
-import CreateUserMealComponent from "./Components/UserComponent/CreateUserMealComponent";
-import ViewUserSingleMealComponent from "./Components/UserComponent/ViewUserSingleMealComponent";
-import UpdateUserSingleMealComponent from "./Components/UserComponent/UpdateUserSingleMealComponent";
+// import CreateUserMealComponent from "./Components/UserComponent/CreateUserMealComponent";
+// import ViewUserSingleMealComponent from "./Components/UserComponent/ViewUserSingleMealComponent";
+// import UpdateUserSingleMealComponent from "./Components/UserComponent/UpdateUserSingleMealComponent";
 import MealComponent from "./Components/MealsComponent/MealComponent";
 
 //Todo {
@@ -35,12 +35,12 @@ function App(){
         <BrowserRouter>
             <Route path='/' component={CalorieHeader}/>
             <Switch>
-                <Route exact path='/' component={WelcomePage}/>
-                <Route exact path='/login' component={LogInComponent}/>
-                <Route exact path='/signup' component={SignUpComponent}/>
+                <Route  exact path='/' component={WelcomePage}/>
+                <Route accessArray={[0]} exact path='/login' component={LogInComponent}/>
+                <Route accessArray={[0]} exact path='/signup' component={SignUpComponent}/>
 
                 {/* shows user data else meal data if a plain user, using TableMeal and TableUser */}
-                <PrivateRoute exact accessArray={[1, 3]} path='/home' component={HomeContainer}/>
+                <PrivateRoute exact accessArray={[2, 3]} path='/home' component={HomeContainer}/>
 
                 <PrivateRoute exact accessArray={[2,3]} path='/new/user' component={AddUserFormComponent} />
                 <PrivateRoute exact accessArray={[2,3]} path='/user/:userId' component={ViewUserComponent}/>
@@ -56,11 +56,10 @@ function App(){
 
 
 
-                <PrivateRoute exact accessArray={[1]} path='/me/new/meal' component={CreateUserMealComponent} />
-                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId' component={ViewUserSingleMealComponent} />
-                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId/update' component={UpdateUserSingleMealComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/new/meal' component={AddMealFormComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId' component={ViewMealComponent} />
+                <PrivateRoute exact accessArray={[1]} path='/me/meal/:mealId/update' component={UpdateMealComponent} />
                 <PrivateRoute exact accessArray={[1]} path='/me/meal' component={MealComponent} />
-
 
                 <PrivateRoute exact accessArray={[1,2,3]} path='/not-authorised' component={NotAuthorised}/>
                 {/*<Route exact path='/user/:userId/meals' component={SpecificUserMeal} />*/}

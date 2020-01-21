@@ -41,7 +41,7 @@ function SpecificUserMeal(props) {
     }, []);
 
     const getMealData = async () => {
-        const url = Paths.local + 'meal/of/'; // +  props.location.props.userName;
+        const url = Paths.home + 'meal/of/'; // +  props.location.props.userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers":header});
         if(response.data.success) {

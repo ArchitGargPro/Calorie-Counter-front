@@ -23,31 +23,31 @@ function AddMealForm(props) {
 
     //send the data to the backend
     const addMealData = async (values) => {
-        const url =  Paths.local + "meal/new";
+        const url =  Paths.home + "meal/new";
         const headers = AuthUtil.getHeaders();
         const response = await Axios.post(url, values, {"headers": headers});
         if (response.data.success) {
-            console.log(response)
+            // console.log(response)
         } else {
             alert(response.data.message);
         }
     };
 
     const handleChange = (e) =>{
-        console.log(e.target.value);
-        console.log(e.target.name);
-        console.log(e.type);
-        console.log('data, before>>>>>>>', data);
+        // console.log(e.target.value);
+        // console.log(e.target.name);
+        // console.log(e.type);
+        // console.log('data, before>>>>>>>', data);
         const d  = data;
         const name = e.target.name
         d[name] = e.target.value;
         // const d = {...data, {[name]:e.target.value,}}
-        console.log('<<<<<<<<<d>>>>>>>>>>>>', d);
+        // console.log('<<<<<<<<<d>>>>>>>>>>>>', d);
         setData((prevState) =>{
             return {...prevState, ...d }
         });
 
-        console.log('data, afterr>>>>>>>>>>', data);
+        // console.log('data, afterr>>>>>>>>>>', data);
     }
 
 
@@ -65,7 +65,7 @@ function AddMealForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('clicked>>>>>>>>>>>>>>>>>>', e);
+        // console.log('clicked>>>>>>>>>>>>>>>>>>', e);
         console.log(data);
 
     };

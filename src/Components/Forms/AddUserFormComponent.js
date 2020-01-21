@@ -1,4 +1,4 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, notification} from "antd";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
 import Axios from "axios";
@@ -17,7 +17,7 @@ function AddUserForm(props) {
 
     //send the data to the backend
     const AddSingleUserData = async () => {
-        const url =  Paths.local + 'user/new';
+        const url =  Paths.home + 'user/new';
         const header = AuthUtil.getHeaders();
         const response = await Axios.post(url, data,{"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
@@ -25,15 +25,21 @@ function AddUserForm(props) {
             //redirect to the view page
             props.history.push('/user/' + response.data.data.userName);
         } else {
-            alert(response.data.message);
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
+
+            // alert();
         }
     };
 
     const handleChange = (e) =>{
-        console.log(e.target.value);
-        console.log(e.target.name);
-        console.log(e.type);
-        console.log('data, before>>>>>>>', data);
+        // console.log(e.target.value);
+        // console.log(e.target.name);
+        // console.log(e.type);
+        // console.log('data, before>>>>>>>', data);
         const d  = data;
         const name = e.target.name
         d[name] = e.target.value;
@@ -50,19 +56,38 @@ function AddUserForm(props) {
     const checkPassword =(e)=>{
         const value = e.target.value;
         setPassword2(value);
-        // if(password2 === data.password){
-        //
-        // }else{
-        //     alert('error, password dont match')
-        // }
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('clicked>>>>>>>>>>>>>>>>>>', e);
-        console.log(data);
 
-        AddSingleUserData()
+        if (password2 === data.password) {
+            if(data.access > 3 || data.access <= 0) {
+                notification.open({
+                    message: 'Illegal Access',
+                    description:
+                        'Access are not 1 , 2 or 3',
+                });
+            }
+            else if (!data.name){
+                notification.open({
+                    message: 'Empty Name',
+                    description:
+                        'Name cannot be empty',
+                });
+            }
+            else{
+                AddSingleUserData();
+            }
+        } else {
+            notification.open({
+                message: 'Password Dont Match',
+                description:
+                    'Both Password are not same',
+            });
+        }
+
 
     };
     // const {getFieldDecorator} = props.form;

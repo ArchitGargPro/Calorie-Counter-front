@@ -54,7 +54,7 @@ function CalorieHeader(props){
     return(
         <div>
         <PageHeader
-            title="Calorie Counter"
+            title={<Link to={((AuthUtil.getUser())?(AuthUtil.getUser().access === 1) ? '/me/meal' : '/home': '/home') }>Calorie Counter</Link>}
             style={{
                 border: '1px solid rgb(235, 237, 240)',
             }}

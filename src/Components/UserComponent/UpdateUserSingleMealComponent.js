@@ -10,7 +10,7 @@ import Paths from "../../Constants/Path";
 function UpdateUserSingleMealComponent(props) {
     const mealId = props.match.params.mealId;
     const userName = AuthUtil.getUser().userName;
-    console.log(mealId, userName);
+    // console.log(mealId, userName);
 
     const [data, setData] = useState({
         title : "",
@@ -22,10 +22,10 @@ function UpdateUserSingleMealComponent(props) {
     // console.log('>>>>>>>>>>>>>>data>>>>>>>>>>>>>>', data);
 
     const getSingleMealData = async () => {
-        const url = Paths.local + 'user/' + userName;
+        const url = Paths.home + 'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
-        console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
+        // console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         if (response.data.success) {
             setData(response.data.data);
         } else {

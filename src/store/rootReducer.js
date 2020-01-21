@@ -6,7 +6,7 @@ import AuthUtil from "../utils/AuthUtil";
 
 const initialStateGenerator = () => {
     if (AuthUtil.getUser()) {
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<authutil is present>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        //console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<authutil is present>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         const data = JSON.parse(localStorage.getItem('user'));
         let access;
         switch (data.access) {
@@ -32,7 +32,7 @@ const initialStateGenerator = () => {
 
         }
     else{
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<nope nope nope>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        // console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<nope nope nope>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
         return(
             {

@@ -10,7 +10,7 @@ function ActiveUserProfileUpdate(props) {
     const [data, setData] = useState(null);
 
     const getSingleUserData = async () => {
-        const url =  Paths.local +  'user/' + userName;
+        const url =  Paths.home +  'user/' + userName;
         const header = AuthUtil.getHeaders();
         const response = await Axios.get(url, {"headers": header});
         // console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);

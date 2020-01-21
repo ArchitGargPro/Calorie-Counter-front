@@ -1,4 +1,4 @@
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, notification, DatePicker, TimePicker} from 'antd';
 import {ETables} from "../../Constants/EAccess";
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../../utils/AuthUtil";
@@ -15,51 +15,103 @@ function AddMealForm(props) {
         id: '',
     });
 
-    const userId = props.match.params.userId;
+    let userId = undefined;
+    if (AuthUtil.getUser().access === 1){
+        userId = AuthUtil.getUser().userName;
+    }else {
+        userId = props.match.params.userId;
+    }
     //this userName is send when a admin creates meal for a  user.... named userName,
 
 
 
     const addMealData = async () => {
-        const url = Paths.local +  "meal/new";
+        const url = Paths.home +  "meal/new";
         const headers = AuthUtil.getHeaders();
 
         const d = {...data, 'userName': userId};
 
+        console.log('DDdddddK///////////////////////', d);
 
         const response = await Axios.post(url,d,{"headers": headers});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         if (response.data.success) {
             //redirect to the view page
+            (AuthUtil.getUser().access === 1) ? props.history.push('/me/meal') :
              props.history.push('/user/' + userId + '/meal/');
         } else {
-            alert(response.data.message);
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
+            // alert(response.data.message);
         }
     };
 
     const handleChange = (e) =>{
-        console.log(e.target.value);
-        console.log(e.target.name);
-        console.log(e.type);
-        console.log('data, before>>>>>>>', data);
         const d  = data;
         const name = e.target.name
         d[name] = e.target.value;
-        // const d = {...data, {[name]:e.target.value,}}
-        console.log('<<<<<<<<<d>>>>>>>>>>>>', d);
         setData((prevState) =>{
             return {...prevState, ...d }
         });
-
-        console.log('data, afterr>>>>>>>>>>', data);
     };
 
 
+    const setDatePickerManager = (e) =>{
+        const d = data;
+        console.log(e.format('DD/MM/YYYY'));
+        console.log(d);
+        console.log(typeof d['date']);
+        d['date'] = e.format('DD/MM/YYYY');
+        console.log(d);
+
+        setData((prevState) => {
+                return {...prevState, ...d}
+            }
+        );
+        console.log('e.target.value}}}}}}}}}}}}}}}}}}}}}}}}}', e)
+    };
+
+
+    const setTimeHandle = (e) =>{
+        const d = data;
+        console.log(d);
+        d['time'] = e.format('HH:mm');
+        console.log(d);
+
+        setData((prevState) => {
+                return {...prevState, ...d}
+            }
+        );
+        console.log('e.target.value}}}}}}}}}}}}}}}}}}}}}}}}}', e)
+
+    };
+
+
+
+
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('clicked>>>>>>>>>>>>>>>>>>', e);
-        console.log(data);
-        addMealData();
+            e.preventDefault();
+
+        if(!data.title) {
+                notification.open({
+                    message: 'Empty Title',
+                    description:
+                        'Title cant be empty',
+                });
+            }
+        else if(data.calorie < 0) {
+            notification.open({
+                message: 'Negative Calorie',
+                description:
+                    'Calorie cant be negative',
+            });
+        }
+        else{
+            addMealData();
+        }
 
     };
 
@@ -67,17 +119,22 @@ function AddMealForm(props) {
         <div>
             {data ?
                 (<Form layout='inline' onSubmit={handleSubmit}>
+
                     <Form.Item label="Title">
                         <Input value={data.title} name='title' type='text' onChange={handleChange} />
                     </Form.Item> <br/>
                     <Form.Item label="Calorie">
                         <Input value={data.calorie} name='calorie' type='number' onChange={handleChange}/>
                     </Form.Item><br/>
-                    <Form.Item label="Date">
-                        <Input value={data.date} name='date' type='text' onChange={handleChange}/>
+                    <Form.Item label="DatePicker">
+                        <DatePicker allowClear={false} onChange={setDatePickerManager} />
                     </Form.Item><br/>
+                    {/*<Form.Item label="Date">*/}
+                    {/*    <Input value={data.date} name='date' type='text' onChange={handleChange}/>*/}
+                    {/*</Form.Item><br/>*/}
                     <Form.Item label="Time">
-                        <Input value={data.time} name="time" type='text' onChange={handleChange}/>
+                        {/*<Input value={data.time} name="time" type='text' onChange={handleChange}/>*/}
+                        <TimePicker allowClear={false} format="HH:mm" placeholder="time" onChange={setTimeHandle}/>
                     </Form.Item><br/>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

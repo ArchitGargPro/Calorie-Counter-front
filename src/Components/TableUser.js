@@ -10,8 +10,10 @@ import ActionTypes from "../store/actionTypes";
 
 
 function TableUser(props) {
+    const [totalPageLength, setTotalPageLength] = useState(0);
+    const [pageNo, setPageNo] = useState(1);
 
-    // let data = props.userData;
+
 
     const columnSet ={
         user: [
@@ -78,23 +80,34 @@ function TableUser(props) {
         ],
     };
 
-    // const [data, setData] = useState(null);
 
 
     useEffect(() => {
         getUserData();
-    }, []);
+    }, [pageNo]);
+
+
+
+
 
 
     const getUserData = async () => {
-        const url =  Paths.local + 'user?page=1&limit=10';
+        let url =  Paths.home + 'user?limit=10';
         const header = AuthUtil.getHeaders();
+        let page = '&page=' + pageNo;
+        console.log(pageNo);
+
+        url = url + page;
+        console.log('url>>>>>>>>>>>>>>>>>>>>>>>', url);
         const response = await Axios.get(url, {"headers":header});
+
+
         console.log('<<<<<<<<<<<<<<<<<<respone>>>>>>>>>>>>>>>', response);
         if(response.data.success ) {
             const d = response.data.data;
             console.log('d',d);
             props.updateUserDataAction(d);
+            setTotalPageLength(response.data.dataLength);
         } else {
             alert(response.data.message);
         }
@@ -109,10 +122,10 @@ function TableUser(props) {
                 pagination={{
                     position: 'bottom',
                     defaultCurrent: 1,
-                    pageSize: 4,
-                    total: 100,
+                    pageSize: 10,
+                    total: totalPageLength,
                     onChange: (page: number) => {
-                        console.log(page);
+                       setPageNo(page);
                     }
                 }}
             />

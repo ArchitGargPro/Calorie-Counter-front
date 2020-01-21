@@ -37,7 +37,7 @@ class AuthUtil {
         this.jwttoken = jwttoken;
         localStorage.setItem("jwttoken", jwttoken);
          this.user = user;
-         console.log('<<<<<<<<<<<<<<<<<<setJWTToken>>>>>>>>>>>>>>>', JSON.stringify(this.user));
+         // console.log('<<<<<<<<<<<<<<<<<<setJWTToken>>>>>>>>>>>>>>>', JSON.stringify(this.user));
          localStorage.setItem("user", JSON.stringify(this.user));
     }
 }
