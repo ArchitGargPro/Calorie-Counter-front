@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import {Table} from "antd";
+import {notification, Table} from "antd";
 import AuthUtil from "../utils/AuthUtil";
 import Paths from "../Constants/Path";
 
@@ -51,8 +51,11 @@ function SpecificUserMeal(props) {
             if(response.data.message === "no meals found") {
                 setData(null);
             } else {
-                alert(response.data.message);
-            }
+                notification.open({
+                    message: 'Error',
+                    description:
+                    response.data.message,
+                });            }
         }
     };
 

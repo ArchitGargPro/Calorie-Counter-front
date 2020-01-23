@@ -93,15 +93,15 @@ function CreateUserForm(props) {
     return (
         <div>
             {data ?
-                (<Form layout='inline' onSubmit={handleSubmit}>
-                    <Form.Item label="userName">
-                        <Input value={data.userName} name='userName' type='text' onChange={handleChange} />
+                (<Form layout='inline' autocomplete="off" onSubmit={handleSubmit}>
+                    <Form.Item label="Email">
+                        <Input value={data.userName} name='userName' type='email' onChange={handleChange} />
                     </Form.Item> <br/>
                     <Form.Item label="Password">
-                        <Input.Password value={data.password} name='password' type='text' onChange={handleChange}/>
+                        <Input value={data.password} name='password' type='password' onChange={handleChange}/>
                     </Form.Item> <br/>
                     <Form.Item label="Confirm Password">
-                        <Input.Password value={password2} name='password' type='text' onChange={checkPassword}/>
+                        <Input value={password2} name='password' type='password' onChange={checkPassword}/>
                     </Form.Item> <br/>
                     <Form.Item label="Name">
                         <Input value={data.name} name='name' type='text' onChange={handleChange}/>

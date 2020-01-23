@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Table} from "antd";
+import {Layout, notification, Table} from "antd";
 import CalorieSideBar from "./Containers/CalorieSideBar";
 import ContentContainer from "./Containers/ContentContainer";
 import {Link} from "react-router-dom";
@@ -83,7 +83,11 @@ function ViewAllMeals(props) {
             console.log('????????????', data);
         }
         else {
-            alert('failed attempt');
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
             const d = [{
                 "title": "dinner",
                 "calorie": "2367",

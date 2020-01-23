@@ -36,7 +36,11 @@ function UpdateForm(props) {
             (AuthUtil.getUser().access === 1) ? props.history.push('/me/meal/' )  :
             props.history.push('/user/'+ userId + '/meal/' + mealId);
         } else {
-            alert(response.data.message);
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
         }
     };
 

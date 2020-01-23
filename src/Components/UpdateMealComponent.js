@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
-import {Avatar, Button, Descriptions, Form, Input} from "antd";
+import {Avatar, Button, Descriptions, Form, Input, notification} from "antd";
 import UpdateMealForm from "./Forms/UpdateMealForm";
 import Paths from "../Constants/Path";
 function UpdateMealComponent(props) {
@@ -27,8 +27,11 @@ function UpdateMealComponent(props) {
             //console.log('data',d);
             // console.log('????????????', data);
         } else {
-            alert('failed attempt')
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     };
 
     useEffect(() => {

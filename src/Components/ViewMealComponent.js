@@ -13,7 +13,7 @@
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
-import {Avatar, Button, Descriptions} from 'antd';
+import {Avatar, Button, Descriptions, notification, Popconfirm} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import Paths from "../Constants/Path";
 
@@ -46,13 +46,39 @@ function ViewMealComponent(props){
             setData(d);
             // console.log('????????????', data);
         } else {
-            alert('failed attempt')
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     }
             useEffect(() => {
                 // console.log('data',data);
                 getSingleMealData();
             }, []);
+
+
+
+
+
+    const deleteMeal = async() =>{
+        const url = Paths.home + 'meal/remove/' + mealId;
+        const header = AuthUtil.getHeaders();
+        const response = await Axios.delete(url, {"headers": header});
+        // console.log('response>>>>>>>>>>>>>>>', response);
+        if (response.data.success) {
+            console.log('sucess');
+            (AuthUtil.getUser().access === 3) ?
+            props.history.push('/home')
+                : props.history.push('/me/meal')
+            // console.log('worked>>>>>>>>>>>>>>>>', data)
+        } else {
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
+    };
 
 
             // d: 3, userName: "admin2", name: "Admin2", access: 3, calorie: 2000}
@@ -74,6 +100,11 @@ function ViewMealComponent(props){
                             </Link>
                         </Button>
                         &nbsp;&nbsp;&nbsp;
+                        <Popconfirm title="Sure to Delete?" onConfirm={deleteMeal}>
+                                <Button type="primary">
+                                Delete
+                                </Button>
+                        </Popconfirm>
                 </span>
                 </div>
 

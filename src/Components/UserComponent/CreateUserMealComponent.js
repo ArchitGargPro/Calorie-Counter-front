@@ -1,4 +1,4 @@
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, notification} from 'antd';
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import AuthUtil from "../../utils/AuthUtil";
@@ -29,8 +29,11 @@ function AddMealForm(props) {
         if (response.data.success) {
             // console.log(response)
         } else {
-            alert(response.data.message);
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     };
 
     const handleChange = (e) =>{

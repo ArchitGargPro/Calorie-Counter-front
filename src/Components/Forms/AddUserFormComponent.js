@@ -94,16 +94,17 @@ function AddUserForm(props) {
 
     return (
         <div>
+            <h1> Add New User </h1>
             {data ?
                 (<Form layout='inline' onSubmit={handleSubmit}>
                     <Form.Item label="userName">
-                        <Input value={data.userName} name='userName' type='text' onChange={handleChange} />
+                        <Input value={data.userName} name='userName' type='email' onChange={handleChange} />
                     </Form.Item> <br/>
                     <Form.Item label="New Password">
-                        <Input.Password value={data.password} name='password' type='text' onChange={handleChange}/>
+                        <Input value={data.password} name='password' type='password' onChange={handleChange}/>
                     </Form.Item> <br/>
                     <Form.Item label="Check Password">
-                        <Input.Password value={password2} name='password' type='text' onChange={checkPassword}/>
+                        <Input value={password2} name='password' type='password' onChange={checkPassword}/>
                     </Form.Item> <br/>
                     <Form.Item label="Name">
                         <Input value={data.name} name='name' type='text' onChange={handleChange}/>

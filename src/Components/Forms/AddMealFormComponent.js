@@ -117,6 +117,7 @@ function AddMealForm(props) {
 
     return (
         <div>
+            <h1>Add New Meal</h1>
             {data ?
                 (<Form layout='inline' onSubmit={handleSubmit}>
 

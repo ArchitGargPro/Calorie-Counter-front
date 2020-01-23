@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
-import {Avatar, Button, Descriptions, Form, Input} from "antd";
+import {Avatar, Button, Descriptions, Form, Input, notification} from "antd";
 import UpdateUserForm from "./Forms/UpdateUserForm";
 import Paths from "../Constants/Path";
 
@@ -21,8 +21,11 @@ function UpdateUserComponent(props) {
         if (response.data.success) {
             setData(response.data.data);
         } else {
-            alert(response.data.message);
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     };
 
     useEffect(() => {

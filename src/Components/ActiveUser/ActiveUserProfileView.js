@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import {Avatar, Button, Descriptions} from 'antd';
+import {Avatar, Button, Descriptions, notification} from 'antd';
 import {Link} from "react-router-dom";
 import AuthUtil from "../../utils/AuthUtil";
 import Paths from "../../Constants/Path";
@@ -21,8 +21,11 @@ function ActiveUserProfileView(props){
             setData(response.data.data);
             // console.log('worked>>>>>>>>>>>>>>>>', data)
         } else {
-            alert(response.data.message);
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     };
 
     useEffect(() => {

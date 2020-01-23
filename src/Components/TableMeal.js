@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import {Table, Tag} from "antd";
+import {notification, Table, Tag} from "antd";
 import AuthUtil from "../utils/AuthUtil";
 import {Link, withRouter} from "react-router-dom";
 import Paths from "../Constants/Path";
@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import ActionTypes from "../store/actionTypes";
 
 //get all meal by a username
-
 
 function TableMeal(props) {
     const [totalPageLength, setTotalPageLength] = useState(0);
@@ -40,10 +39,10 @@ function TableMeal(props) {
             {
                 title: 'Calories',
                 dataIndex: 'calorie',
-                render: (record) => {
-                    console.log('record', record);
+                render: (calorie,record) => {
+                    console.log('??????????????????????????????record?????????????????????????', record);
                     return (
-                        <Tag color={getColor(record)}>{record}</Tag>
+                        <Tag color={getColor(record.sum)}>{calorie}</Tag>
                     );
                 }
             },
@@ -55,7 +54,9 @@ function TableMeal(props) {
                 title: '',
                 dataIndex: '',
                 render: (record) => {
+                    console.log('{}}}}}}}}}}}}}}}}}}{{{{{{{{{{}', record);
                     const pk = record.id;
+                   // getColor(record.sum);
                     return (
                         (props.match.url === '/meals') ? null : (<Link to={props.match.url + '/' + pk}>View</Link>)
                     );
@@ -76,6 +77,24 @@ function TableMeal(props) {
 
     // const userName = props.userName;
 
+    const getSingleUserData = async (userName) => {
+        const url = Paths.home + 'user/' + userName;
+        const header = AuthUtil.getHeaders();
+
+        try{
+            const response = await Axios.get(url, {"headers":header});
+            console.log('response>>>>>>>>>>>>>>>>>>>>>>>>>', response);
+            if(response.data.success) {
+                props.setExpectedValue(response.data.data.calorie);
+            }
+        }catch (e) {
+            notification.open({
+                message: 'Error',
+                description:
+                'error while fetching the user calorie',
+            });        }
+
+    };
 
     const getMealData = async () => {
         console.log('inside >>>>>>>>>>>>>>>>>>>>>>>');
@@ -94,8 +113,13 @@ function TableMeal(props) {
 
         url = url + page;
         // const url = 'http://192.168.0.152:3000/meal';
+        if(AuthUtil.getUser().access === 1){
+            getSingleUserData(AuthUtil.getUser().userName);
+        }
+
         console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', props.userName);
         if (props.userName) {
+            //get the user data from this username and then update th eexpected calorie here...
             url = url +  '&userName=' +props.userName;
         } // null => get all meal as admin viewing , if user then userName is Authutil...
         console.log(url);
@@ -111,8 +135,11 @@ function TableMeal(props) {
             }
 
         } catch (e) {
-            alert('invalid ');
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                'Error',
+            });        }
     };
 
 
@@ -163,7 +190,15 @@ const mapDispatchToProps = dispatch => ({
         payload: {
             mealData
         }
+    }),
+
+    setExpectedValue : (expectedValue) => dispatch({
+        type: ActionTypes.SET_EXPECTED_DATA,
+        payload: {
+            expectedValue
+        }
     })
+
 });
 
 

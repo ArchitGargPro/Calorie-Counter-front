@@ -69,10 +69,6 @@ function NormalLoginForm (props) {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
-                        initialValue: true,
-                    })}
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{width : '100%'}}>
                         Log in
                     </Button> <br/>

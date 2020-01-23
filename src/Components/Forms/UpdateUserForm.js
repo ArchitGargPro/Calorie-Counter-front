@@ -12,14 +12,17 @@ function UpdateForm(props) {
     const [password2, setPassword2] = useState('');
 
     //userName is passed via data, which is perfect as /me/update and /user/<userID>/update can both access them..
-    const userName = data.userName;  //get the userName from the data passed from the update Component
+    // const userName = data.userName;  //get the userName from the data passed from the update Component
 
     //send the data to the backend
+
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>data',data);
     const updateSingleUserData = async () => {
         const url =  Paths.home + 'user/update';
 
         const header = AuthUtil.getHeaders();
         //Todo put request not working.....
+
         const response = await Axios.put(url,  data,{"headers": header});
         console.log('>>>>>>>>>>>>>>>response>>>>>>>>>>>>>>>', response);
         // props.history.goBack()
@@ -101,20 +104,22 @@ function UpdateForm(props) {
         {/*    <Input value={data.userName} name='userName' type='text' onChange={handleChange} />*/}
         {/*</Form.Item> <br/>*/}
         <Form.Item label="New Password">
-            <Input.Password value={data.password} name='password' type='text' onChange={handleChange}/>
+            <Input value={data.password} name='password' type='password' onChange={handleChange}/>
         </Form.Item> <br/>
         <Form.Item label="Check Password">
-            <Input.Password value={password2} name='password' type='text' onChange={checkPassword}/>
+            <Input value={password2} name='password' type='password' onChange={checkPassword}/>
         </Form.Item> <br/>
         <Form.Item label="Name">
             <Input value={data.name} name='name' type='text' onChange={handleChange}/>
         </Form.Item><br/>
-        <Form.Item label="Access">
-           <Input value={data.access} name='access' type='number' onChange={handleChange}/>
-        </Form.Item><br/>
+                        {(AuthUtil.getUser().access !== 1 && AuthUtil.getUser().userName !== data.userName )?<Form.Item label="Access">
+                            <Input value={data.access} name='access' type='number' onChange={handleChange}/>
+                        </Form.Item> : null}
+        <br/>
+                    {(AuthUtil.getUser().access !== 1 && AuthUtil.getUser().userName !== data.userName)?
         <Form.Item label="Calories">
           <Input value={data.calorie} name="calorie" type='number' onChange={handleChange}/>
-        </Form.Item><br/>
+        </Form.Item> : null }
         <Form.Item>
             <Button type="primary" htmlType="submit">
                 Submit

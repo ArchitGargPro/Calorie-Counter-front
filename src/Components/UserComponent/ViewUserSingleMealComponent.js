@@ -13,7 +13,7 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import AuthUtil from "../../utils/AuthUtil";
-import {Avatar, Button, Descriptions} from 'antd';
+import {Avatar, Button, Descriptions, notification} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import Paths from "../../Constants/Path";
 
@@ -48,7 +48,11 @@ function ViewUserSingleMealComponent(props){
             setData(d);
             console.log('????????????', data);
         } else {
-            alert('failed attempt')
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
         }
     }
     useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import {Tag, Table, Pagination} from "antd";
+import {Tag, Table, Pagination, notification} from "antd";
 import {EAccess, Accesses} from "../Constants/EAccess";
 import AuthUtil from "../utils/AuthUtil";
 import Axios from "axios";
@@ -106,10 +106,23 @@ function TableUser(props) {
         if(response.data.success ) {
             const d = response.data.data;
             console.log('d',d);
-            props.updateUserDataAction(d);
+
+            //to hide the current user from the list of user....
+           const dataToUpdate =  d.filter((item) => {
+                if(item.userName !== AuthUtil.getUser().userName)
+                    return item
+                }
+            );
+
+            props.updateUserDataAction(dataToUpdate);
+            console.log('response.data.dataLength>>>>>>>>>>>>>>>>>>>>>',response.data.dataLength)
             setTotalPageLength(response.data.dataLength);
         } else {
-            alert(response.data.message);
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });
         }
     };
 

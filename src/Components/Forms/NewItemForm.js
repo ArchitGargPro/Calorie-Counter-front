@@ -1,4 +1,4 @@
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, notification} from 'antd';
 import React from "react";
 import {ETables} from "../../Constants/EAccess";
 import {connect} from "react-redux";
@@ -21,8 +21,11 @@ function NewItemForm(props) {
             props.setVisible(false);
             props.setNewRowAlert(true);
         } else {
-            alert(response.data.message);
-        }
+            notification.open({
+                message: 'Error',
+                description:
+                response.data.message,
+            });        }
     };
 
     const handleSubmit = (e) => {
